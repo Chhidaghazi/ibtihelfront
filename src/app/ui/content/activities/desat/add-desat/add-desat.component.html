@@ -1,0 +1,159 @@
+
+<div class="midde_cont">
+    <div class="container-fluid">
+      <div class="row column_title">
+        <div class="col-md-12">
+          <div class="page_title">
+            <h2 style="text-align: center;">Ajouter un nouveau DESAT</h2>
+          </div>
+        </div>
+      </div>
+      <!-- row -->
+      <div class="row column4 graph">
+        <!-- Gallery section -->
+        <div class="col-md-12">
+          <div class="white_shd full margin_bottom_30">
+  
+            <div class="full gallery_section_inner padding_infor_info">
+              <form ngNativeValidate (ngSubmit)="saveDesat()">
+  
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>COG</label>
+                    
+                    <input id="cog" type="text" class="form-control" required [(ngModel)]="currentDesat.cog" name="cog">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Unité D'intervention</label>
+                    <select class="form-control" [(ngModel)]="currentDesat.ui" name="uniteIntervention"
+                      required>
+  
+                      <option value="NC" selected>NC</option>
+                      <option value="AURA">AURA</option>
+                      <option value="PP">PP</option>
+                      <option value="NDF">NDF</option>
+                      <option value="SO">SO</option>
+  
+  
+                    </select>
+                  </div>
+  
+                  <div class="form-group col-md-2">
+                    <label>Banettes</label>
+                    <select disabled name="subject" class="custom-select" multiple>
+                      <option *ngIf="currentDesat.ui=== 'SO'">SO RIP 17</option>
+                      <option *ngIf="currentDesat.ui=== 'SO'">SO RIP 33</option>
+                      <option *ngIf="currentDesat.ui=== 'SO'">SO RIP 79/86</option>
+                      <option *ngIf="currentDesat.ui=== 'NC'">RIP ORNE</option>
+                    </select>
+                  </div>
+  
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>FI</label>
+                    <input type="text" class="form-control"  required [(ngModel)]="currentDesat.fi"
+                      name="fi">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Type Element</label>
+                    <select class="form-control" [(ngModel)]="currentDesat.type_element" name="type_element">
+  
+  
+                      <option *ngFor="let typeElement of typesElements; let i = index" value="{{typeElement.nomType}}">{{
+                        typeElement.nomType }}</option>>
+  
+                    </select>
+                  </div>
+                </div>
+  
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Date reception</label>
+                    <input id="dateReception" type="date" class="form-control" required
+                      [(ngModel)]="currentDesat.dateReception" [ngModel]="now" name="dateReception">
+                  </div>
+                  <div class="form-group col-md-6">
+  
+                    <label>Date Livraison</label>
+                    <input type="date" class="form-control" id="dateLivraison" disabled name="dateLivraison"
+                    >
+                  </div>
+                </div>
+  
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Durée</label>
+                    <input type="number" class="form-control" min="1" required [(ngModel)]="currentDesat.duree"
+                      name="duree">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Commentaire</label>
+                    <input type="text" class="form-control" [(ngModel)]="currentDesat.commentaire" name="commentaire">
+                  </div>
+                </div>
+              
+  
+  
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Motif</label>
+                    <select (change)="onChange($event)" class="form-control" [(ngModel)]="currentDesat.motif"
+                      name="motif">
+  
+                      <option value="" >Livré</option>
+                      <option value="En attente">En attente</option>
+                      <option *ngFor="let motif of motifs; let i = index" value="{{motif.descriptionMotif}}">{{
+                        motif.descriptionMotif }}</option>>
+  
+                    </select>
+                  </div>
+                  <div class="form-group col-md-6">
+  
+                    <label>Date Refus</label>
+                    <input type="date" class="form-control" id="dateRefus" disabled name="date_refus" >
+                  </div>
+                </div>
+  
+  
+  
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Quantité</label>
+                    <input type="number" class="form-control" min="1" required [(ngModel)]="currentDesat.quantite"
+                      name="quantite">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>ZONE</label>
+                    <select class="form-control" [(ngModel)]="currentDesat.zone" name="zone"
+                      required>
+                      <option value="ZTD BD-ZMD" >ZTD BD-ZMD</option>
+                      <option value="ZTD HD">ZTD HD</option>
+                    </select>
+                  </div>
+                </div>
+                
+  
+                <br><br>
+  
+  
+                <button type="submit" class="bty">Enregistrer</button>
+              </form>
+  
+  
+  
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- footer -->
+      <div class="container-fluid">
+        <div class="row">
+          <div class="footer">
+            <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end dashboard inner -->
+  </div>

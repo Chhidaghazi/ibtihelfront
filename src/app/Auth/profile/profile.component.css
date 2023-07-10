@@ -1,0 +1,16 @@
+.profile-image > img{
+    border-radius: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.btn-block {
+    display: block;
+    width: 10%;
+    position:absolute;
+}
+.btn-primary {
+    left: 300px;
+    background-color: #232f3b;
+    border-color: #4a525a;
+}

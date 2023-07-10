@@ -1,0 +1,113 @@
+<nav id="sidebar">
+  <div class="sidebar_blog_1">
+    <div class="sidebar-header">
+      <div class="logo_section">
+        <a href="index.html"><img class="logo_icon img-responsive" src="assets/images/logo/logo_icon.png" alt="#" /></a>
+      </div>
+    </div>
+    <div class="sidebar_user_info">
+      <div class="icon_setting"></div>
+      <div class="user_profle_side">
+        <div class="user_img"><img class="img-responsive" src="assets/images/layout_img/im.png" alt="#" /></div>
+        <div class="user_info">
+          <h6>{{ collaborateur.nom }} {{collaborateur.prenom }}</h6>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sidebar_blog_2">
+
+    <ul class="list-unstyled components">
+      <h4 *ngIf="isPilote">Pilotage</h4>
+      <li *ngIf="isPilote"><a routerLink="dashboardPilote"><i class="fa fa-dashboard yellow_color"></i> <span>Dashboard</span></a>
+      </li>
+
+      <li *ngIf="isPilote"><a routerLink="kpi"><i class="fa fa-bar-chart-o purple_color2"></i> <span>KPIs</span></a>
+      </li>
+      <li *ngIf="isPilote"><a routerLink="attachement"><i class="fa fa-money red_color"></i>
+          <span>Attachement</span></a>
+      </li>
+
+
+
+
+      <h4 *ngIf="isProducteur">Activités</h4>
+      <li *ngIf="isProducteur"><a routerLink="backlog"><i class="fa fa-table orange_color"></i> <span>Backlog</span></a>
+      </li>
+      <li *ngIf="isProducteur">
+        <a href="#esimb" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i
+            class="fa fa-navicon yellow_color"></i> <span>ESIMB</span></a>
+        <ul class="collapse list-unstyled" id="esimb">
+          <li>
+            <a routerLink="AddEsimb"> <span>Ajout</span></a>
+          </li>
+          <li>
+            <a routerLink="ListEsimb"> <span>Traitement</span></a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="isProducteur">
+        <a href="#nropm" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i
+            class="fa fa-navicon yellow_color"></i> <span>NRO-PM</span></a>
+        <ul class="collapse list-unstyled" id="nropm">
+          <li>
+            <a routerLink="ajouterNropm"> <span>Ajout</span></a>
+          </li>
+          <li>
+            <a routerLink="traiterNropm"> <span>Traitement</span></a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="isProducteur">
+        <a href="#desat" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i
+            class="fa fa-navicon yellow_color"></i> <span>DESAT</span></a>
+        <ul class="collapse list-unstyled" id="desat">
+          <li>
+            <a routerLink="AddDesat"> <span>Ajout</span></a>
+          </li>
+          <li>
+            <a routerLink="ListDesat"> <span>Traitement</span></a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="isProducteur">
+        <a href="#graphic" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i
+            class="fa fa-navicon yellow_color"></i> <span>Graphic</span></a>
+        <ul class="collapse list-unstyled" id="graphic">
+          <li>
+            <a routerLink="AddGrafic"> <span>Ajout</span></a>
+          </li>
+          <li>
+            <a routerLink="ListGrafic"> <span>Traitement</span></a>
+          </li>
+        </ul>
+      </li>
+
+      <h4 *ngIf="isAdmin">Administration</h4>
+      <li *ngIf="isAdmin"><a href="tables.html"><i class="fa fa-calendar purple_color2"></i> <span>Timesheet</span></a>
+      </li>
+      <li *ngIf="isAdmin">
+        <a href="#typePrestation" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i
+            class="fa fa-navicon yellow_color"></i> <span>Type prestation</span></a>
+        <ul class="collapse list-unstyled" id="typePrestation">
+          <li>
+            <a href="dashboard.html"> <span>Ajout</span></a>
+          </li>
+          <li>
+            <a href="dashboard_2.html"> <span>Consultation</span></a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="isAdmin"><a routerLink="gestionComptes"><i class="fa fa-users orange_color"></i> <span>Comptes</span></a>
+      </li>
+
+
+
+
+
+
+
+    </ul>
+  </div>
+</nav>

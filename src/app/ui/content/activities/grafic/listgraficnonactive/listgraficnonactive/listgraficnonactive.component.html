@@ -1,0 +1,149 @@
+<app-listgrafic *ngIf="isgraphiclist"> </app-listgrafic>
+<div class="midde_cont">
+    <div class="container-fluid">
+      <div class="row column_title">
+        <div class="col-md-12">
+          <div class="page_title">
+            <h2>Gr@fic (Sup)</h2>
+          </div>
+        </div>
+      </div>
+      <!-- row -->
+      <div class="row column4 graph">
+        <!-- Gallery section -->
+        <div class="col-md-12">
+          <div class="white_shd full margin_bottom_30">
+  
+            <div class="full gallery_section_inner padding_infor_info">
+  
+              <div class="full graph_head">
+                <div class="heading1 margin_0">
+  
+                  <button class="bty" data-toggle="modal" data-target="#importerHistorique"><i
+                      class="fa fa-upload white_color fa-1x"></i> &nbsp; Importer historique</button>&nbsp;
+                </div>
+              </div>
+
+         <div class="full graph_head">
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input"  type="radio" name="searchbyIdGraphic" value="IdGraphic" checked [(ngModel)]="searchby">
+                <label class="form-check-label" for="inlineRadio1" >Id Grafic</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="searchbyDateTrait" value="DateTrait" [(ngModel)]="searchby">
+                  <label class="form-check-label" for="inlineRadio2" >Date de Traitement</label>
+            </div>
+            <div *ngIf="isPilote" class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="searchbyAffectation" value="Affectation" [(ngModel)]="searchby" >
+                <label class="form-check-label" for="inlineRadio3" >Affectation</label>
+            </div>
+
+                    &nbsp; 
+                    <div class="form-check form-check-inline">
+            <input type="text" class="form-control" placeholder="Search by Id Graphic" *ngIf="searchby === 'IdGraphic'" [(ngModel)]="searchValue">
+            <input type="date" class="form-control"id="dateTraitement" required *ngIf="searchby === 'DateTrait'" [(ngModel)]="searchValue" name="dateTraitement"/>
+            <select name="Affectation" class="custom-select" style="border: 0;" *ngIf="searchby === 'Affectation'" [(ngModel)]="searchValue">
+                <option value={{colab.cuid}} *ngFor="let colab of colabsteam; let i = index" > {{colab.cuid}} {{colab.nom}} {{colab.prenom}}</option>    
+            </select> 
+                    </div>
+            <div class="form-check form-check-inline">
+              <button class="bt" (click)="search()"><i class="fa fa-search orange_color fa-2x"></i></button>
+            </div>
+                   
+           </div>
+
+       <div class="table-responsive-xl">
+        <br><br><br><br><br><br><br><br>
+       <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover">
+          <thead>
+            <tr>
+           <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Id Grafic</th>
+           <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Date traitement</th>
+           <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Type de traitement</th>
+           <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;"
+                  *ngIf="isPilote">Affectation</th>
+                          
+           <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;"
+           *ngIf="isPilote" >Active</th>
+            </tr>
+          </thead>
+            <tbody>
+           <tr *ngFor="let graphic of grafics; let i = index" [class.active]="i == currentIndex" >
+          <td style="color: black;"> {{ graphic.idGrafic}} </td>
+           <td style="color: black;"> {{ graphic.dateTraitement | date: 'dd/MM/yyyy' }} </td>
+           <td style="color: black;"> {{ graphic.type_traitement }} </td>
+           <td style="color: black;"> {{ graphic.affectation }} </td>
+           <td style="color: black;"> {{ graphic.traitement_effectue }} </td>
+           <td *ngIf="isPilote"> <button class="material-symbols-outlined" data-bs-toggle="modal" data-bs-target="#confirmdeletionmodal" (click)="setActivegrafic(graphic,i)" >published_with_changes</button> </td>                                 
+           </tr> 
+                
+             </tbody>
+            </table>
+    </div>
+    <div style="text-align: right;" *ngIf="isPilote"> 
+        <button class="bt" (click)="listgrafic()"><i class="fa fa-bars"></i></button>  
+    </div>
+    
+     </div>
+  </div>
+    </div>
+  </div>
+ <!-- footer -->
+ <div class="container-fluid">
+    <div class="row">
+     <div class="footer">
+<p>Copyright © 2023 Soft BTool All rights reserved.</p>
+</div>
+ </div>
+ </div>
+ </div>
+ <!-- end dashboard inner -->
+</div>
+
+    
+
+     <!-- Modal delation-->
+     <div class="modal fade" id="confirmdeletionmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Activate Acte {{currentGraphic.idGrafic}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="!graficactiveok && !graficactiveerr">
+          <img class="activeImage" src="/assets/reactivate.jpg" alt="reactivate">
+          <br>
+          Are you sure you want to reactivate the act {{currentGraphic.idGrafic}} ?
+          <br>
+        </div>
+
+          <div *ngIf="graficactiveok">
+            <img class="activeImage" src="/assets/done.png" alt="done">
+            <br>
+            The acte {{currentGraphic.idGrafic}} reactivated successfully !
+            <br>
+          </div>
+
+          <div *ngIf="graficactiveerr">
+            <img class="activeImage" src="/assets/error.png" alt="error">
+            <br>
+            There is a problem please try again !
+            <br>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btnModalactive"  (click)="activeGrafic()" *ngIf="!graficactiveok && !graficactiveerr">Active</button>
+          <button type="button" class="btnModalclose" data-bs-dismiss="modal" *ngIf="!graficactiveok && !graficactiveerr">Cancel</button>
+          <button type="button" class="btnModalclose" data-bs-dismiss="modal" *ngIf="graficactiveok || graficactiveerr" (click)="okmodal()">OK</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- End Modal delation-->
+
+
+
+

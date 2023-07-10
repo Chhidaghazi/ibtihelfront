@@ -1,0 +1,154 @@
+<br>
+    <div class="card-body">
+    <h2 class="title" style="text-align: center;">Add BPU</h2>
+     <hr>
+     <br>
+        <form>
+                <table class="table-add" >
+                        <tr class="tr1">
+                          <div class="td2"> 
+                          <td>Prestation</td>
+                        </div>   
+                        <td>
+                            <div class="col-sm-10">
+                                <select name="type_prestation" id="type_prestation" [(ngModel)]="currentBpu.type_prestation" (change)="onElementChange()" (change)= "onTariChange()" (change)= "onTarifChange()"><option value="">
+                                    --Please choose an option--  </option>
+                                <option value="ESIMB" >ESIMB</option>
+                                <option value="NROPM">NRO-PM</option>
+                                <option value="DESAT">DESAT</option>
+                                <option value="BRAME">BRAME</option>
+                                <option value="GRAFIC">GRAFIC</option>
+                              </select>
+                            </div>
+                        </td>
+                        <div class="td2">
+                                <td>Tarif</td>
+                            </div>
+                            <td>
+                        <select id="tarif" [(ngModel)]="currentBpu.tarif">
+                                <option value="">
+                                        --Please choose an option--  </option>
+                        <option *ngIf="currentBpu.type_prestation === 'ESIMB'" value="tarif1">Tarif 1</option>
+                        <option *ngIf="currentBpu.type_prestation  === 'ESIMB'" value="tarif2">Tarif 2</option>
+                        <option *ngIf="currentBpu.type_prestation  === 'NROPM'" value="tarif3">Tarif 3</option>
+                        <option *ngIf="currentBpu.type_prestation  === 'NROPM'" value="tarif4">Tarif 4</option>
+                        </select>
+                    </td> 
+                        
+                        <div class="td2">
+                            <td>Element</td>
+                        </div>
+                        <td><div class="col-sm-10">
+                              <input class="form-control"
+                               type="text"
+                               id="element"
+                               name="element"
+                               required
+                               [(ngModel)]="currentBpu.type_element" >
+                            </div>
+                        </td>  
+                         </tr>
+                      <br>
+                      
+                      <tr class="tr1">
+                          <div class="td2"> 
+                          <td>Date Debut</td>
+                        </div>   
+                              <td><div class="col-sm-10">
+                                  <input type="text"
+                                  class="form-control"
+                                  id="dateDebut"
+                                  required
+                                  [(ngModel)]="currentBpu.dateDebut" 
+                                  name="dateDebut">
+                                </div>
+                              </td>
+                              <div class="td2"> 
+                              <td>Date validite</td>
+                              </div>
+                          <td><div class="col-sm-10">
+                            <input type="date"
+                            class="form-control"
+                            id="dateValidite"
+                            required
+                            [(ngModel)]="currentBpu.dateValidite"
+                            name="dateValidite">
+                          </div></td>
+      
+                          <div class="td2"> 
+                          <td>Date Expiration</td>
+                          </div>
+                          <td><div class="col-sm-10">
+                            <input type="text"
+                            class="form-control"
+                            id="dateExpiration"
+                            required
+                            [(ngModel)]="currentBpu.dateExpiration"
+                            name="dateExpiration">
+                            
+                          </div></td>
+      
+      
+                         </tr>
+                      <br>
+                      <tr class="tr1">
+                          <div class="td2">
+                              <td>Type pénalité</td>
+                            </div>
+                            <td>
+                                <div class="col-sm-10">
+                                    <select name="pets" id="pet-select" [(ngModel)]="currentBpu.type_penalite" (change)="onPenaliteChange()"><option value="">
+                                        --Please choose an option--  </option>
+                                    <option value="variable" >Variable</option>
+                                    <option value="fixe">Fixe</option>
+                                  </select>
+                                </div>
+                            </td>
+
+                            <div class="td2">
+                          <td>Penalité</td>
+                        </div>
+                        <td>
+                            <div class="col-sm-10">
+                        <input [(ngModel)]="currentBpu.penalite" 
+                        [ngClass]="{'percent': currentBpu.type_penalite === 'variable', 'dollar': currentBpu.type_penalite === 'fixe'}" 
+                        (keypress)="onlyNumberKey($event)"
+                         type="text"
+                         min="0"
+                         step=0.1>
+                            </div>
+                        </td>
+                        <div class="td2"> 
+                            <td>PU (€)</td>
+                          </div>   
+                                <td><div class="col-sm-10">
+                                    <input type="number" step=0.01 min="0"
+                                    class="form-control"
+                                    id="PU"
+                                    required
+                                    [(ngModel)]="currentBpu.pu"
+                                    name="PU">
+                                  </div>
+                                </td>
+                         </tr>
+                      </table>
+          <hr>              
+          <br> 
+          <div class="alert alert-success d-flex align-items-center" role="alert" *ngIf="submitted">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+            <div>
+              The acte was submited successfully
+            </div>
+          </div> 
+          <br> 
+          <div class="input-group" style="text-align: center;" *ngIf="!submitted">
+            <button class="btn btn--radius-2 btn--blue" style="background-color: rgb(90, 86, 86);" type="submit" (click)="save()">Submit</button>
+          </div>
+
+          <div class="eyy"  style="text-align: center;">
+         <button  style="background-color: rgb(138, 136, 136);" type="submit" href="/admin" class="nav-link" routerLink="/admin">Return</button>
+          </div>
+          </form>
+
+        
+       </div>

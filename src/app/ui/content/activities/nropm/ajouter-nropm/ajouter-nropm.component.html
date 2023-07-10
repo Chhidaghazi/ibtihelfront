@@ -1,0 +1,143 @@
+<div class="midde_cont">
+  <div class="container-fluid">
+    <div class="row column_title">
+      <div class="col-md-12">
+        <div class="page_title">
+          <h2>Ajout un nouveau NRO-PM</h2>
+        </div>
+      </div>
+    </div>
+    <!-- row -->
+    <div class="row column4 graph">
+      <!-- Gallery section -->
+      <div class="col-md-12">
+        <div class="white_shd full margin_bottom_30">
+
+          <div class="full gallery_section_inner padding_infor_info">
+
+
+            <form ngNativeValidate (ngSubmit)="saveNropm()">
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>ID OWF</label>
+
+                  <input id="cog" type="text" class="form-control"
+                   required [(ngModel)]="currentNropm.cog" name="cog">
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Unité D'intervention</label>
+                  <select class="form-control" [(ngModel)]="currentNropm.uniteIntervention"
+                   name="uniteIntervention"
+                    required>
+                    <option value="NC" selected>NC</option>
+                    <option value="AURA">AURA</option>
+                    <option value="PP">PP</option>
+                    <option value="NDF">NDF</option>
+                    <option value="SO">SO</option>
+                  </select>
+                </div>
+
+                <div class="form-group col-md-2">
+                  <label>Banettes</label>
+                  <select disabled name="subject" class="custom-select" multiple>
+                    <option *ngIf="currentNropm.uniteIntervention=== 'SO'">SO RIP 17</option>
+                    <option *ngIf="currentNropm.uniteIntervention=== 'SO'">SO RIP 33</option>
+                    <option *ngIf="currentNropm.uniteIntervention=== 'SO'">SO RIP 79/86</option>
+                    <option *ngIf="currentNropm.uniteIntervention=== 'NC'">RIP ORNE</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Date reception</label>
+                  <input id="datereception" type="date" class="form-control" required
+                    [(ngModel)]="currentNropm.dateReception" [ngModel]="now" name="dateReception">
+                </div>
+                <div class="form-group col-md-6">
+
+                  <label>Date Livraison</label>
+                  <input type="date" class="form-control" id="dateLivraison"
+                   disabled name="dateLivraison">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Durée</label>
+                  <input type="number" class="form-control" min="1" required [(ngModel)]="currentNropm.duree"
+                    name="duree">
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Commentaire</label>
+                  <input type="text" class="form-control" [(ngModel)]="currentNropm.commentaire" name="commentaire">
+                </div>
+              </div>
+
+
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Motif</label>
+                  <select (change)="onChange($event)"
+                   class="form-control" [(ngModel)]="currentNropm.motif"
+                    name="motif">
+
+                    <option value="" selected>Livré</option>
+                    <option value="enAttente">En attente</option>
+                    <option *ngFor="let motif of motifs; let i = index" value="{{motif.descriptionMotif}}">{{
+                      motif.descriptionMotif }}</option>>
+
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Type Element</label>
+                  <select class="form-control" [(ngModel)]="currentNropm.type_element" name="type_element">
+
+
+                    <option *ngFor="let typeElement of typesElements; let i = index" value="{{typeElement.nomType}}">{{
+                      typeElement.nomType }}</option>>
+
+                  </select>
+                </div>
+              </div>
+
+
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Quantité</label>
+                  <input type="number" class="form-control" min="1" required [(ngModel)]="currentNropm.quantite"
+                    name="quantite">
+                </div>
+                <div id="pms" *ngFor='let in of counter(currentNropm.quantite) ;let i = index' class="form-group col-md-6">
+                  <label>FI</label>
+                  <input type="text" class="form-control" required [(ngModel)]="currentNropm.pms[i].refPm" name="refPm">
+                </div>
+              </div>
+
+              <br><br>
+
+
+              <button type="submit" class="bty">Enregistrer</button>
+            </form>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- footer -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="footer">
+          <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end dashboard inner -->
+</div>

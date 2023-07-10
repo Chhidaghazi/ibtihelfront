@@ -1,0 +1,40 @@
+<div class="center verticle_center full_height">
+  <div class="login_section">
+    <div class="logo_login">
+      <div class="center">
+        <img width="210" src="assets/images/logo/logo_icon.png" alt="#" />
+      </div>
+    </div>
+    <div class="login_form">
+      <form ngNativeValidate (ngSubmit)="onSubmit()">
+        <fieldset>
+          <div class="field">
+            <label class="label_field">Nom utilisateur</label>
+            <input type="text" placeholder="Entrer votre nom d'utilisateur" name="username" [(ngModel)]="form.username"
+              required />
+          </div>
+          <div class="field">
+            <label class="label_field">Mot de passe</label>
+            <input type="password" placeholder="Entrer votre mot de passe" class="form-control" name="password"
+              [(ngModel)]="form.password" required minlength="4" />
+          </div>
+          <div class="alert alert-danger" *ngIf="isLoginFailed"> Mot de passe ou nom d'utilisateur incorrecte !</div>
+          <div class="alert alert-danger" *ngIf="isDesactivate"> Le compte est désactivé !</div>
+          <div class="field">
+            <label class="label_field hidden">hidden label</label>
+            <a class="forgot" href="">Mot de passe oublié ?</a>
+          </div>
+          
+          <div class="field margin_0">
+            <label class="label_field hidden">hidden label</label>
+            <button type="submit"style="margin-left: 50px;" class="main_bt">Se connecter</button>
+          </div>
+        </fieldset>
+      </form>
+      <div class="field">
+        <label class="label_field hidden">hidden label</label>
+         <a routerLink="signUp" class="forgot" style="color: orangered;font-weight: bold;" href="">S'inscrire</a>
+      </div>
+    </div>
+  </div>
+</div>

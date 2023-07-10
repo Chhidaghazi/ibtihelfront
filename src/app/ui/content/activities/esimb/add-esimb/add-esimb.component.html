@@ -1,0 +1,345 @@
+<div class="midde_cont">
+  <div class="container-fluid">
+    <div class="row column_title">
+      <div class="col-md-12">
+        <div class="page_title">
+          <h2>Ajouter un nouveau ESIMB</h2>
+        </div>
+      </div>
+    </div>
+    <!-- row -->
+    <div class="row column4 graph">
+      <!-- Gallery section -->
+      <div class="col-md-12">
+        <div class="white_shd full margin_bottom_30">
+
+          <div class="full gallery_section_inner padding_infor_info">
+
+              <form ngNativeValidate (ngSubmit)="saveEsimb()">
+
+          
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                     <label>Code Banbou</label>
+                     <input  id="codeBanbou" class="form-control"
+                            type="text" 
+                            (keypress)="onlyNumberKey($event)"
+                            name="codeBanbou" 
+                            required 
+                            [(ngModel)]="currentEsimb.codeBanbou">
+                     
+                   </div>
+                   <div class="form-group col-md-4">
+                   <label>Code IMB</label>
+                   <input  class="form-control"
+                          type="text" 
+                          name="code_imb" 
+                          [value]="currentEsimb.motif == 'Inexistence IMB Banbou' ? '' : currentEsimb.codeIMB"
+                          required  
+                          [disabled]= "currentEsimb.motif =='Inexistence IMB Banbou'"
+                          maxlength="16"   
+                          [(ngModel)]="currentEsimb.codeIMB">
+                          
+                          <div class="alert-danger" *ngIf="codeIMB_err == 2">
+                           <div>Le code IMB doit etre sous le format 'IMB/XXXXX/S ou X ou A/XXXX ' </div>
+                          </div>
+                   </div>
+                   <div class="form-group col-md-2">
+                      <button class="bt"
+                      [disabled]="!currentEsimb.codeIMB"
+                      [disabled]= "currentEsimb.motif =='Inexistence IMB Banbou'"
+                   data-toggle="modal" data-target="#addEsimb"><i
+                     class="fa fa-pencil-square yellow_color fa-2x"></i></button>           
+                   </div>
+   
+                  </div>
+
+
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                      <label>Date Réception</label>
+                      <input id="dateReception" type="date" class="form-control" required
+                      [(ngModel)]="currentEsimb.dateReception" 
+                      [ngModel]="now" name="dateReception">
+                             <div class="alert alert-danger" role="alert" *ngIf="dateReception_err == 1">
+                                  Please select a valid date
+                                 </div>
+                      </div>
+                      <div class="form-group col-md-6">
+                          <label>Date Vérification</label>
+                          <input  class="form-control"
+                                 id="dateVerification"
+                                 type="text" 
+                                 name="dateVerification" 
+                                 disabled
+                                 required 
+                                 [value]= "now2">
+                        </div>  
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                      <label>Motif</label>
+                          <select  (change)="onChange($event)"
+                           class="form-control" name="motif" id="motif" 
+                          [(ngModel)]="currentEsimb.motif">
+
+                          <option value=""></option>
+                          <option value="En attente">En attente</option> 
+                          <option *ngFor="let motif of motifs; let i = index" value="{{motif.descriptionMotif}}">{{
+                      motif.descriptionMotif }}</option>>  
+                        </select>
+                        
+                      </div>
+
+                      <div class="form-group col-md-6">
+                          <label>Duree</label>
+                     
+                          <input type="number"  class="form-control"
+                           name="duree" [(ngModel)]="currentEsimb.duree">
+                          <div class="alert alert-danger" role="alert" *ngIf="duree_err == 1">
+                           Duree should be between 1 and 60
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                          <label>Commentaire</label>
+                          <input class="form-control" type="text"
+                           name="commentaire" [(ngModel)]="currentEsimb.commentaire">
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label>Date Livraison</label>
+                        
+                            <input type="date" class="form-control" id="dateLivraison" id="dateLivraison3"
+                            disabled name="dateLivraison">     
+                    </div>
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                          <label>Commentaire Technique</label>
+                              <form  class="form-control"  [(ngModel)]="currentEsimb.commentairetechnique">
+                              <textarea *ngIf="currentEsimb.motif === ''" disabled> </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'ORT'" disabled>Bonjour, Il s’agit d’un immeuble ORT. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Historique'" disabled>Bonjour, L’IMB est déjà dans un processus de déploiement, son évolution suit son cours. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Immeuble'" disabled>Bonjour, Il s’agit d’un immeuble dont le nombre de EL =xx. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB optimum'" disabled>Bonjour, Après analyse de la demande, il s’est avéré que l’IMB n’existe pas sur OPTIMUM. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB Banbou'" disabled>Bonjour, Après analyse de la demande, il s’est avéré que le code IMB est non identifié sur votre demande, merci de préciser le code IMB et son adresse pour qu'on puisse traiter votre demande. Cordialement,  </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'incohérence'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'rami'" disabled>Bonjour, Après analyse de la demande, nous avons identifié que cette adresse correspond à une construction récente. Afin d’accompagner au mieux le client pour le raccordement fibre de la maison individuelle, nous vous invitons à l’orienter vers le site https://maison-individuelle.orange.fr/accueil. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Pb inexistant GFI'" disabled> Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Blocage Optimum'" disabled>Bonjour, Il s’agit d’un blocage SYNDIC/ Technique /UI (« Cause » ; Date programmée déblocage : XX/XX/XXXX. Cordialement,</textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'IMB Raccordable Optimum'" disabled>Bonjour, L’immeuble est déjà en statut Raccordable, la date de MESC ARCEP est ; XX/XX/XXXX. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Clé en main Client'" disabled>Bonjour, L'IMB est en cours d'évolution par le service concerné. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'PB Saturé'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB Ipon'" disabled>Bonjour, Après analyse de la demande, il s’est avéré que l’IMB n’existe pas sur IPON. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Position IMB introuvable'" disabled>Bonjour, Merci de nous fournir une photo avec une croix pour indiquer l’emplacement exacte de logement, pour qu'on puisse traiter votre demande. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'PB inexistant Ipon'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Non evolution statut IMB'" disabled>Bonjour, Votre demande ne concerne pas la fiche Evolution statut IMB. Cordialement,</textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'En attente'" disabled> </textarea>
+                              
+                              </form>
+                      </div>
+                      <div class="form-group col-md-6">
+                          <label style="padding-right: 100px;">Commentaire Demandeur</label>
+                          <form  class="form-control" [(ngModel)]="currentEsimb.commentairedemandeur">
+                               <textarea *ngIf="currentEsimb.motif === 'ORT'" disabled>Bonjour, L’immeuble est déployé par un autre opérateur. Vous pouvez inviter votre client à se rendre directement sur le site de l’opérateur concerné. Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,</textarea>
+                               <textarea *ngIf="currentEsimb.motif === 'Historique'" disabled>Bonjour, La création de l’adresse Immeuble est inférieure à 4 mois, l’évolution est en cours. IMB crée le --/--/---- Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,</textarea>      
+                               <textarea *ngIf="currentEsimb.motif === 'Immeuble'" disabled>Bonjour, La demande d’évolution de statut IMB ne concerne que les pavillons d’un ou 2 logements, nous ne pouvons pas traiter cette demande. Les demandes supérieures à 2 logements sont traitées dans un processus différent. Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,</textarea>      
+                               <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB optimum'" disabled>Bonjour, Après analyse de la demande, il s’est avéré que l’immeuble n’existe pas dans le SI. Cette demande ne concerne pas une demande d’évolution de statut IMB mais une demande d’adresse manquante.Cordialement,</textarea>      
+                               <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB Banbou'" disabled>Bonjour, Après analyse de la demande, il s’est avéré que le code IMB est non identifié sur votre demande, merci de préciser le code IMB et son adresse pour qu'on puisse traiter votre demande. Cordialement,</textarea>      
+                               <textarea *ngIf="currentEsimb.motif === 'incohérence'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,</textarea>      
+                               <textarea *ngIf="currentEsimb.motif === 'rami'" disabled>Bonjour, Après analyse de la demande, nous avons identifié que cette adresse correspond à une construction récente. Afin d’accompagner au mieux le client pour le raccordement fibre de la maison individuelle, nous vous invitons à l’orienter vers le site https://maison-individuelle.orange.fr/accueil. Cordialement, </textarea>                   
+                              <textarea *ngIf="currentEsimb.motif === 'Pb inexistant GFI'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Blocage Optimum'" disabled>Bonjour, Un blocage « Type de blocage », « Cause » est constaté, l’IMB est bloqué jusqu’à --/--/---- Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Si blocage DivOP, cela signifie que c’est un IMB ORT, donc se référer au commentaire IMB ORT. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'IMB Raccordable Optimum'" disabled>Bonjour, L’immeuble est déjà en statut Raccordable, la date de MESC ARCEP est ; XX/XX/XXXX. Cordialement, </textarea>
+                               <textarea *ngIf="currentEsimb.motif === 'Clé en main Client'" disabled>Bonjour, L’immeuble est déjà pris en charge par un partenaire et se trouve dans un processus d’évolution. Nous ne pouvons malheureusement pas prendre en charge cette demande ni communiquer sur un délai d’éligibilité. Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'PB Saturé'" disabled> Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB Ipon'" disabled> Bonjour, Après analyse de la demande, il s’est avéré que l’immeuble n’existe pas dans le SI. Cette demande ne concerne pas une demande d’évolution de statut IMB mais une demande d’adresse manquante.Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Position IMB introuvable'" disabled>Bonjour, Cet IMB n’est pas correctement positionné, il est impossible d’identifier correctement l’emplacement du logement du client. Merci de vous rapprocher du client afin de refaire une demande en indiquant précisément l’emplacement de la maison. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'PB inexistant Ipon'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'Non evolution statut IMB'" disabled>Bonjour, Il ne s’agit pas d’une demande de l’évolution statut IMB / Hors périmètre, merci de revoir avec votre responsable. Cordialement, </textarea>
+                              <textarea *ngIf="currentEsimb.motif === 'En attente'" disabled>  </textarea>
+                              <textarea *ngIf="currentEsimb.motif === ''" disabled>  </textarea>
+                
+                                  </form>
+                      </div>
+
+                  </div>
+                  
+                  <div  style="text-align: center;" *ngIf="!submitted">
+                  <button class="btn btn--radius-2 btn--blue" style="background-color: rgb(245, 108, 17);" type="submit"  [disabled]= "currentEsimb.motif =='En attente'">Cloturer</button>
+                  <button class="btn btn--radius-2 btn--blue" style="background-color: rgb(245, 108, 17);" type="submit"   [disabled]= "currentEsimb.motif !='En attente'">S'affecter</button>
+                  </div>
+                  <div style="text-align: center;" *ngIf="submitted">
+                      <button class="btn btn--radius-2 btn--blue" style="background-color: rgb(245, 108, 17);" type="submit" (click)="newEsimb()">New</button>
+                    </div>
+                </form>
+
+              </div>
+            </div>
+            </div>
+            </div>
+
+              
+                   
+     <!--
+          <div class="alert alert-success d-flex align-items-center" role="alert" *ngIf="submitted">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+            <div>
+              The acte was submited successfully
+            </div>
+          </div>  -->
+    
+            
+          
+
+          
+          
+          
+
+        
+  <!--modal add IMB -->
+ 
+  <div class="modal fade" id="addEsimb">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Ajout IMB</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <div class="modal-body">
+              <form ngNativeValidate (ngSubmit)="saveEsimb()">
+
+        
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label>Code Banbou</label>
+                        <input type="text"
+                          class="form-control"
+                          id="codeBanbou"
+                          disabled
+                          required
+                          [(ngModel)]="currentEsimb.codeBanbou"
+                          name="codeBanbou">
+                            </div>
+                      <div class="form-group col-md-6">
+                         <label>Code IMB</label>  
+                          <input type="text"
+                             class="form-control"
+                              id="codeIMB"
+                              [value]="currentEsimb.motif == 'Inexistence IMB Banbou' ? '' : currentEsimb.codeIMB"
+                              required
+                              [disabled]= "currentEsimb.motif =='Inexistence IMB Banbou'"                             [(ngModel)]="currentEsimb.codeIMB"
+                              name="codeIMB"
+                              maxlength="16"   
+                           [(ngModel)]="currentEsimb.codeIMB">
+                           <div class="alert-danger" *ngIf="codeIMB_err == 2">
+                              <div>Le code IMB doit etre sous le format 'IMB/XXXXX/S ou X ou A/XXXX ' </div>
+                             </div>
+                      </div>
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                  <label> Date Réception </label>
+                        <input class="form-control"
+                               id="dateReception"
+                               type="text" 
+                               name="dateReception" 
+                               required 
+                               [(ngModel)]="currentEsimb.dateReception"
+                               disabled
+                               [ngModel]= now>
+                      </div>
+  
+                      <div class="form-group col-md-6">
+                  <label>Date verification</label>
+                    <input type="text"
+                    class="form-control"
+                    id="date_verification"
+                    required
+                    disabled
+                    [(ngModel)]="currentEsimb.dateVerification"
+                    name="date_verification"
+                    [ngModel]= now>
+              </div>
+                  </div>
+
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                      <label>Date livraison</label>
+                        <input type="date" class="form-control" id="dateLivraison2" 
+                        disabled name="dateLivraison"
+                       >
+                      </div>
+      
+                      <div class="form-group col-md-6">
+                          <label>Motif</label>
+                              <select  (change)="onChangee($event)" 
+                               class="form-control" name="motif" id="motif" 
+                              [(ngModel)]="currentEsimb.motif">
+    
+                              <option value=""></option>
+                              <option value="En attente">En attente</option> 
+                              <option *ngFor="let motif of motifs; let i = index" value="{{motif.descriptionMotif}}">{{
+                          motif.descriptionMotif }}</option>>  
+                            </select>
+                            
+                          </div>
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                          <label>Commentaire</label>
+                              <input type="te" 
+                              class="form-control"
+                              id="commentaire"
+                              required
+                              [(ngModel)]="currentEsimb.commentaire"
+                              name="commentaire">
+                      </div>
+                      <div class="form-group col-md-6">
+                                <label>Duree</label>       
+                                        <input type="number"
+                                        class="form-control"
+                                        id="duree"
+                                        required
+                                        [(ngModel)]="currentEsimb.duree"
+                                        name="duree">
+                      </div>
+                      </div>   
+            
+
+          
+ <!-- Modal footer -->
+<div class="modal-footer">    
+    <button class="bty" type="submit" (click)="saveEsimb()">Enregistrer</button>
+    <button type="button" class="bty" data-dismiss="modal">Fermer</button>
+  </div>
+
+</form>
+
+</div>
+
+</div>
+</div>
+</div>
+ 
+
+
+
+
+<!-- footer -->
+<div class="container-fluid">
+<div class="row">
+<div class="footer">
+  <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- end dashboard inner -->
+</div>
+

@@ -1,0 +1,375 @@
+<app-listgraficnonactive *ngIf="isgraphiclisnonactive"> </app-listgraficnonactive>
+
+<div class="midde_cont">
+    <div class="container-fluid">
+      <div class="row column_title">
+        <div class="col-md-12">
+          <div class="page_title">
+            <h2>Traitement Grafic</h2>
+          </div>
+        </div>
+      </div>
+      <!-- row -->
+      <div class="row column4 graph">
+        <!-- Gallery section -->
+        <div class="col-md-12">
+          <div class="white_shd full margin_bottom_30">
+  
+            <div class="full gallery_section_inner padding_infor_info">
+  
+              <div class="full graph_head">
+                <div class="heading1 margin_0">
+  
+                  <button class="bty" data-toggle="modal" data-target="#importerHistorique"><i
+                      class="fa fa-upload white_color fa-1x"></i> &nbsp; Importer historique</button>&nbsp;
+                </div>
+              </div>
+
+         <div class="full graph_head">
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input"  type="radio" name="searchbyIdGraphic" value="IdGraphic" checked [(ngModel)]="searchby">
+                <label class="form-check-label" for="inlineRadio1" >Id Grafic</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="searchbyDateTrait" value="DateTrait" [(ngModel)]="searchby">
+                  <label class="form-check-label" for="inlineRadio2" >Date de Traitement</label>
+            </div>
+            <div *ngIf="isPilote" class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="searchbyAffectation" value="Affectation" [(ngModel)]="searchby" >
+                <label class="form-check-label" for="inlineRadio3" >Affectation</label>
+            </div>
+
+                    &nbsp; 
+                    <div class="form-check form-check-inline">
+            <input type="text" class="form-control" placeholder="Search by Id Graphic" *ngIf="searchby === 'IdGraphic'" [(ngModel)]="searchValue">
+            <input type="date" class="form-control"id="dateTraitement" required *ngIf="searchby === 'DateTrait'" [(ngModel)]="searchValue" name="dateTraitement"/>
+            <select name="Affectation" class="custom-select" style="border: 0;" *ngIf="searchby === 'Affectation'" [(ngModel)]="searchValue">
+                <option value={{colab.cuid}} *ngFor="let colab of colabsteam; let i = index" > {{colab.cuid}} {{colab.nom}} {{colab.prenom}}</option>    
+            </select> 
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <button class="bt" (click)="search()"><i class="fa fa-search orange_color fa-2x"></i></button>
+                        </div>
+                   
+            </div>
+
+
+
+       <div class="table-responsive-xl">
+        <br><br><br><br><br><br><br><br>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover">
+           <thead>
+            <tr>
+             <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Id Grafic</th>
+            <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Date traitement</th>
+            <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Type de traitement</th>
+            <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;"
+                      *ngIf="isPilote">Affectation</th>
+            <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Traitement effectué</th>
+
+            <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Actions</th>
+            </tr>
+          </thead>
+                <tbody>
+                <tr *ngFor="let graphic of grafics; let i = index" [class.active]="i == currentIndex" >
+                  <td style="color: black;"> {{ graphic.idGrafic}} </td>
+                  <td style="color: black;"> {{ graphic.dateTraitement | date: 'dd/MM/yyyy' }} </td>
+                  <td style="color: black;"> {{ graphic.type_traitement }} </td>
+                  <td style="color: black;"> {{ graphic.affectation }} </td>
+                  <td style="color: black;"> {{ graphic.traitement_effectue }} </td>
+                  <td *ngIf="isPilote"> <button class="material-symbols-outlined" data-target="#modifierGrafic" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="setActivegrafic(graphic,i)">edit_note</button> </td>
+                  <td *ngIf="!isPilote"> <button class="material-symbols-outlined" data-target="#graficDetails" data-bs-toggle="modal" data-bs-target="#staticBackdrop">visibility</button> </td>
+                  <td *ngIf="isPilote"> <button class="material-symbols-outlined" data-bs-toggle="modal"  data-bs-target="#confirmdeletionmodal" (click)="setActivegrafic(graphic,i)">delete</button> </td>
+                 
+              
+                </tr> 
+
+              </tbody>
+            </table>
+               </div>
+          </div>
+      </div>
+      </div>
+      </div>
+      <!-- footer -->
+<div class="container-fluid">
+    <div class="row">
+      <div class="footer">
+        <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end dashboard inner -->
+</div>
+
+<!-- Modal details-->
+<div class="modal fade" id="graficDetails">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Détails</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <table class="table" *ngIf="currentGraphic">
+
+              <tr>
+                  <td style="font-weight: bold;color: black;">Id Grafic</td>              
+                  <td style="color: black;">{{ currentGraphic.idGrafic }}</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;color: black;">Date Traitement</td>              
+                  <td style="color: black;">{{ currentGraphic.dateTraitement | date: 'dd/MM/yyyy'}}</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;color: black;">Type Traitement</td>              
+                  <td style="color: black;">{{ currentGraphic.type_traitement }}</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;color: black;">Traitement effectué</td>
+                  <td style="color: black;">{{ currentGraphic.traitement_effectue }} </td>
+              </tr> 
+              <tr>
+                  <td style="font-weight: bold;color: black;">Durée</td>
+                  <td style="color: black;">{{ currentGraphic.duree }}</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;color: black;">Affectation</td>
+                  <td style="color: black;"> {{ currentGraphic.affectation }} </td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;color: black;">Commentaire</td>
+                  <td style="color: black;">{{ currentGraphic.commentaire }} </td>
+              </tr>
+              
+              
+          </table>
+            
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="bty" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+  <!-- Modal Modification-->
+  <div class="modal fade" id="modifierGrafic">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Modification</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <div class="modal-body">
+              <form ngNativeValidate (ngSubmit)="updateGrafic()">
+     
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label>Id Grafic</label>
+                        <input class="form-control"
+                               type="number" 
+                               oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+                               name="idGrafic" 
+                               required 
+                               maxlength="8" 
+                               [(ngModel)]="currentGraphic.idGrafic">
+                               <div class="alert alert-danger" role="alert" *ngIf="idgrafic_err">
+                                Id Grafic should be 8 characters long
+                               </div>
+                      </div>
+   
+                      <div class="form-group col-md-6">
+                       <label>Code IMB</label>
+                       <input class="form-control" 
+                              type="text" 
+                              name="code_imb" 
+                              required  
+                              maxlength="16"   
+                              [(ngModel)]="currentGraphic.code_imb">
+                              <div class="alert-danger" *ngIf="codeIMB_err == 1">
+                                <div>Code IMB should be at least 5 characters long</div>
+                              </div>
+                              <div class="alert-danger" *ngIf="codeIMB_err == 2">
+                                <div>Code IMB should start with ' IMB/ ' </div>
+                              </div>      
+                     </div>
+                  </div>
+   
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                       <label>IAR</label>
+                       <input class="form-control" 
+                              type="number" 
+                              oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+                              name="iar" 
+                              required 
+                              maxlength="10"
+                              [(ngModel)]="currentGraphic.iar">
+                              <div class="alert alert-danger" role="alert" *ngIf="iar_err == 1">
+                                IAR should be 10 characters long
+                              </div>
+                     </div>
+                     <div class="form-group col-md-6">
+                          <label>Groupe d'opérateur (OI)</label>
+                          <input class="form-control" type="text" name="groupe_operation" [(ngModel)]="currentGraphic.groupe_operation">
+                          <div class="alert alert-danger" role="alert" *ngIf="groupeOperateur_err == 1">
+                            Please Insert Groupe d'perateur
+                           </div>
+                         </div>
+                  </div>
+                   
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label>Affectation</label>
+                            <select name="subject" class="form-control"  [(ngModel)]="currentGraphic.affectation">
+                               <option value={{colab.cuid}} *ngFor="let colab of colabsteam; let i = index" >{{colab.cuid}} {{colab.nom}} {{colab.prenom}}</option>    
+                            </select>
+                    </div> 
+
+                    <div class="form-group col-md-6">
+                         <label>Date de traitement</label>
+                         <input class="form-control" type="date" name="dateTraitement" [(ngModel)]="currentGraphic.dateTraitement" disabled="">
+                         <div class="alert alert-danger" role="alert" *ngIf="dateTraitement_err == 1">
+                          Please select a valid date
+                         </div>
+                       </div>
+                  </div>
+                
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                          <label>Duree</label>
+                          <input class="form-control" type="number" name="duree" [(ngModel)]="currentGraphic.duree">
+                          <div class="alert alert-danger" role="alert" *ngIf="duree_err == 1">
+                            Duree should be between 1 and 60
+                           </div>
+                         </div>
+            
+                         <div class="form-group col-md-6">
+                         <label>Commentaire</label>
+                         <input class="form-control" type="text" name="commentaire" [(ngModel)]="currentGraphic.commentaire">
+                       </div>
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label>Type de Traitement</label>
+                            <select name="subject" class="form-control" style="border: 0;" [(ngModel)]="currentGraphic.type_traitement">    
+                           <option value="ag">Appel sortant</option>
+                           <option value="cg">Classique Grafic</option>
+                         </select>
+                        <div class="alert alert-danger" role="alert" *ngIf="type_traitement_err == 1">
+                          Please Select an option
+                         </div>
+                    </div> 
+                
+                    <div class="form-group col-md-6">
+                        <label>Statut Grafic</label>
+                            <select name="subject" class="form-control" style="border: 0;" [(ngModel)]="currentGraphic.statut_graphic">
+                                <option value="po">Préparation de l'envoi</option>
+                               <option value="arc">Attente retour client</option>
+                               <option value="l">Libéré</option>
+                            </select>
+                        <div class="alert alert-danger" role="alert" *ngIf="statut_graphic_err == 1">
+                          Please Select an option
+                         </div>
+                    </div> 
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label>Traitement effectué</label>
+                            <select name="subject" class="form-control" style="border: 0;" [(ngModel)]="currentGraphic.traitement_effectue">
+                                <option value="IAPTO" *ngIf="currentGraphic.statut_graphic === 'po'">Injection avec PTO</option>
+                               <option value="ISPTO" *ngIf="currentGraphic.statut_graphic === 'po'">Injection sans PTO</option>
+                               <option value="1REPRDV" *ngIf="currentGraphic.statut_graphic === 'arc'">1er report RDV</option>
+                               <option value="2REPRDV" *ngIf="currentGraphic.statut_graphic === 'arc'">2eme report RDV</option>
+                               <option value="RELANCESMS" *ngIf="currentGraphic.statut_graphic === 'arc'">Relance SMS + Mise en attente</option>
+                               <option value="RELANCERAI" *ngIf="currentGraphic.statut_graphic === 'arc'">Relance RAI</option>
+                               <option value="ABAND" *ngIf="currentGraphic.statut_graphic === 'l'">Abandon de la commande</option>
+                            </select>
+                        <div class="alert alert-danger" role="alert" *ngIf="traitement_effectue_err == 1">
+                          Please Select an option
+                         </div>
+                    </div> 
+                  </div>
+                  
+ <!-- Modal footer -->
+ <div class="modal-footer">
+    <button type="button" class="bty" data-dismiss="modal">Close</button>
+    <button class="bty" type="submit" (click)="updateGrafic()">Enregistrer</button>
+  </div>
+
+</form>
+
+</div>
+
+</div>
+</div>
+</div>                        
+      
+
+
+  <!-- Modal delation-->
+  <div class="modal fade" id="confirmdeletionmodal" data-bs-backdrop="static"
+   data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Delete Acte {{currentGraphic.idGrafic}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="!graficactiveok && !graficactiveerr">
+          <img class="deletImage" src="/assets/delete.png" alt="delete">
+          <br>
+          Are you sure you want to delete acte {{currentGraphic.idGrafic}} ?
+          <br>
+          </div>
+
+          <div *ngIf="graficactiveok">
+            <img class="deletImage" src="/assets/done.png" alt="done">
+            <br>
+            The acte {{currentGraphic.idGrafic}} deleted successfully !
+            <br>
+          </div>
+
+          <div *ngIf="graficactiveerr">
+            <img class="deletImage" src="/assets/error.png" alt="error">
+            <br>
+            There is a problem please try again !
+            <br>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btnModaldelete" (click)="deactiveGrafic()" *ngIf="!graficactiveok && !graficactiveerr">Delete</button>
+          <button type="button" class="btnModalclose" data-bs-dismiss="modal" *ngIf="!graficactiveok && !graficactiveerr">Cancel</button>
+          <button type="button" class="btnModalclose" data-bs-dismiss="modal" *ngIf="graficactiveok || graficactiveerr" (click)="okmodal()">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+       <br>
+       <hr>
+    <br>
+    <div style="text-align: right;" *ngIf="isPilote"> 
+      <button class="btn" (click)="listnonactivegrafic()">
+        <i class="fa fa-trash"></i>
+      </button>  
+    </div>
+         
+
+
+
+   

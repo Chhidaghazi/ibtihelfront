@@ -1,0 +1,81 @@
+
+
+.rr {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-size: 1.3em;
+    font-family: "Fira Sans";
+color: rgb(255, 255, 255);}
+    .r {
+        display: block;
+        padding: 8px 16px;
+        text-decoration: none;
+        font-size: 1.3em;
+        font-family: "Fira Sans";
+        color: rgb(255, 255, 255);}
+        .rrr {
+            display: block;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-family: "Fira Sans";
+            color: rgb(255, 255, 255);}
+
+        .tt {
+            display: block;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-family: "Fira Sans";}
+
+            .t {
+                display: block;
+                padding: 8px 16px;
+                text-decoration: none;
+                font-size: 1.3em;
+                font-family: "Fira Sans";
+            }
+
+
+.navv {
+ position: absolute;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #353434;
+    color : rgb(214, 212, 213);
+    height: 300%;
+  }
+
+
+
+  li a {
+    display: block;
+    color: rgb(255, 255, 255);
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+  
+  li a.active {
+    background-color: #04AA6D;
+    color: white;
+  }
+  
+  li a:hover:not(.active) {
+    background-color: #555;
+    color: rgb(255, 255, 255);
+  }
+
+ul{
+    list-style-type: none;
+    margin: 0;
+}
+
+.container{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}

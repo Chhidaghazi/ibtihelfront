@@ -1,0 +1,314 @@
+
+
+<div class="midde_cont">
+  <div class="container-fluid">
+    <div class="row column_title">
+      <div class="col-md-12">
+        <div class="page_title">
+          <h2>KPI</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="full graph_head">
+    </div>
+
+
+
+<br> <br>
+<div class="row column2 graph margin_bottom_30">
+  <div class="col-md-l2 col-lg-12">
+     <div class="white_shd full">
+        <div class="full graph_head">
+           <div class="heading1 margin_0">
+              <h2>Extra Area Chart</h2>
+           </div>
+
+    <div class="full graph_head">
+      <div class="heading1 margin_0">
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+
+      <label><b>Type prestation</b></label>
+    <select class="form-control" [(ngModel)]="dropPres" (ngModelChange)="changeDropdownPrest($event)"  aria-label=".form-select-sm example">
+
+      <option value="Evolution statut IMB"> Evolution statut IMB</option>
+      <option value="Désaturations Coupleurs">Désaturations Coupleurs</option>
+      <option value="Lien-NROPM">Lien NRO-PM</option>
+      <option  value="mutation">Mutation</option>
+    </select>
+      </div>
+
+
+      <div class="form-group col-md-4">
+      <label>Tarif</label>
+      <select class="form-control" [(ngModel)]="selectedTarif" (ngModelChange)="changeDropdownTarf($event)" aria-label=".form-select-sm example">
+        <option *ngFor="let tarif of dropTar" [value]="tarif.codeTarif "> {{ tarif.codeTarif }}></option>
+      </select>
+      </div>
+
+      <div class="form-group col-md-4">
+
+        <label>Year</label>
+        <select class="form-control" [(ngModel)]="dropYear" (ngModelChange)="changeDropdownYear($event)"  aria-label=".form-select-sm example">
+
+          <option value="2023"> 2023</option>
+          <option value="2022">2022</option>
+          <option value="2021">2021</option>
+          <option  value="2020">2020</option>
+        </select>
+      </div>
+
+
+      <div class="form-group col-md-4">
+        <label>Nb Jours</label>
+        <input class=" form-control" [(ngModel)]="nbjour"  type="number" >
+
+      </div>
+      <div class="form-group col-md-4">
+        <label>Prix</label>
+        <input class=" form-control" [(ngModel)]="prix"  type="number" >
+
+      </div>
+
+      <div class="form-group col-md-2">
+      <button class=" bt1" (click)="Calculer()" ><i class="fa fa-search orange_color fa-2x"></i></button>
+      </div>
+    </div>
+
+      </div>
+
+    </div>
+           <br> <br> <br>
+    <div class="table-responsive-xl">
+    <table datatable  class="table table-hover" >
+      <tr>
+        <th rowspan="1" style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Item</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">KPI</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Janvier</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Février</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Mars</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Avril</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Mai</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Juin</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Juillet</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Aout</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Septembre</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Octobre</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Novembre</th>
+        <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Decembre</th>
+
+      </tr>
+      <tr>
+        <td rowspan="11" style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">{{dropPres}} <br>{{selectedTarif}}</td>
+        <td style="color:rgb(12, 10, 8);text-align: center;font-weight: bold;">Staffing (JA)</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{januaryStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{februaryStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{marchStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{aprilStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{mayStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{juneStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{julyStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{augustStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{septemberStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{octoberStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{novemberStaff}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{decemberStaff}}</td>
+      </tr>
+      <tr>
+        <td style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">CTJ(Qté/JA)</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{januaryCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{februaryCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{marchCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{aprilCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"> {{mayCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{juneCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{julyCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{augustCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{septemberCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{octoberCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{novemberCTJ}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{decemberCTJ}}</td>
+
+      </tr>
+      <tr>
+        <td style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">Capacité (Qté/mois)</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{januaryCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{februaryCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{marchCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{aprilCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{mayCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{juneCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{julyCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{augustCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{septemberCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{octoberCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{novemberCap}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{decemberCap}}</td>
+      </tr>
+      <tr>
+        <td style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">Réalisé (Qté/mois)​</td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{januaryRealise}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{februaryRealise}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{marchRealise}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{aprilRealise}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{mayRealise}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{juneRealise}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{julyRealise}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{augustRealise}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{septemberRealise}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{octoberRealis}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{novemberRealise}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{decemberRealise}}</td>
+      </tr>
+      <tr>
+
+        <td style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">Réalisé/Capacité</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{januaryReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{februaryReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{marchReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{avrilReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{mayReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{juinReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{julyReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{augustReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{septembreReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{octobreReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{novembreReaSurCapa}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{decembrReaSurCapae}}</td>
+      </tr>
+      <tr>
+        <td style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">DMT déclarée(min)​</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{januaryDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{februaryDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{marchDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{aprilDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{mayDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{juneDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{julyDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{augustDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{septemberDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{octoberDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{novemberDMTDec}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{decemberDMTDec}}</td>
+      </tr>
+      <tr>
+        <td style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">DMT calculée (min)​</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{januaryDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{februaryDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{marchDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{aprilDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{mayDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{juneDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{julyDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{augustDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{septemberDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{octoberDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{novemberDMTCalc}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{decemberDMTCalc}}</td>
+      </tr>
+      <tr>
+        <td style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">ETP​</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{januaryETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{februaryETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{marchETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{aprilETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{mayETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{juneETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{julyETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{augustETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"> {{septemberETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{octoberETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{novemberETP}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{decemberETP}}</td>
+      </tr>
+      <tr>
+        <td style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">€ETP​</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+      </tr>
+      <tr>
+        <td style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">€BPU</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">​</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+        <td style="color:rgb(5, 1, 1);text-align: center;"></td>
+
+      </tr>
+
+      <tr>
+        <td style="color:rgb(5, 1, 1);text-align: center;font-weight: bold;">Productivité</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{januarProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{februarProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{marcProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{avriProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{maProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{junProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{julProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{augusProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{septembeProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{octobProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{novembeProd}}</td>
+        <td style="color:rgb(5, 1, 1);text-align: center;">{{decembeProd}}</td>
+      </tr>
+    </table>
+    </div>
+
+        </div>
+     </div>
+  </div>
+</div>
+
+
+
+
+
+
+    <!-- footer -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="footer">
+          <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end dashboard inner -->
+</div>
+
+
+
+

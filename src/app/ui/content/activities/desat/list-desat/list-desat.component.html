@@ -1,0 +1,612 @@
+<div class="midde_cont">
+    <div class="container-fluid">
+      <div class="row column_title">
+        <div class="col-md-12">
+          <div class="page_title">
+            <h2>Traitement DESAT</h2>
+          </div>
+        </div>
+      </div>
+      <!-- row -->
+      <div class="row column4 graph">
+        <!-- Gallery section -->
+        <div class="col-md-12">
+          <div class="white_shd full margin_bottom_30">
+  
+            <div class="full gallery_section_inner padding_infor_info">
+  
+  
+  
+  
+              <div class="full graph_head">
+                <div class="heading1 margin_0">
+  
+                  <button class="bty" data-toggle="modal" data-target="#importerHistorique"><i
+                      class="fa fa-upload white_color fa-1x"></i> &nbsp; Importer historique</button>&nbsp;
+                  <button class="bty" data-toggle="modal" data-target="#importerFichierSpi"><i
+                      class="fa fa-upload white_color fa-1x"></i> &nbsp; Importer fichier spi</button>
+  
+  
+                </div>
+  
+              </div>
+  
+  
+  
+              
+              <div class="full graph_head">
+               
+                    
+                  <div class="form-check form-check-inline">
+                    <input  class="form-check-input" type="radio" name="searchbyUi" value="ui" checked [(ngModel)]="searchby">
+                    <label class="form-check-label" for="inlineRadio1">UI</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchbyCog" value="cog" checked [(ngModel)]="searchby">
+                    <label class="form-check-label" for="inlineRadio2">COG</label>
+                  </div>
+                  <div *ngIf="isPilote" class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchbyAffectation" value="Affectation" [(ngModel)]="searchby" >
+                    <label class="form-check-label" for="inlineRadio3">Affectaion</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchbyMotif" value="motif" [(ngModel)]="searchby" >
+                    <label class="form-check-label" for="inlineRadio3">Motif</label>
+                  </div>
+  
+                  &nbsp; 
+                  <div class="form-check form-check-inline">
+                    <select name="ui" class="custom-select"  *ngIf="searchby === 'ui'" [(ngModel)]="searchValue">
+                      <option value="NC" >NC</option>
+                              <option value="AURA">AURA</option>
+                              <option value="NDF">NDF</option>
+                              <option value="PP">PP</option>
+                              <option value="UISO">UISO</option>
+                     </select>
+                  <input type="text" class="form-control" placeholder="Chercher par ID OWF" *ngIf="searchby === 'cog'" [(ngModel)]="searchValue">
+                  <select  name="Affectation" class="custom-select" *ngIf="searchby === 'Affectation'" [(ngModel)]="searchValue">
+                    <option value={{colab.cuid}} *ngFor="let colab of colabsteam; let i = index" > {{colab.cuid}} {{colab.nom}} {{colab.prenom}}</option>    
+                 </select>
+                 <select multiple name="motif" class="custom-select" *ngIf="searchby === 'motif'" [(ngModel)]="searchValue">
+                  <option value="nonTraite">Non traité</option>  
+                  <option value="En attente">En attente</option>  
+                  <option value="Simple" >Simple</option>
+                  <option value="Complexe">Complexe</option>
+                  <option value="Absence de commentaire">Absence de commentaire</option>
+                  <option value="Absence de la ferme de transport">Absence de la ferme de transport</option>
+                  <option value="Coupleurs allumés">Coupleurs allumés</option>
+                  <option value="Coupleurs déffectueux">Coupleur déffectueux</option>
+                  <option value="En attente">En attente</option>
+                  <option value="RIP ORT">RIP ORT</option>
+                  <option value="nonTraite">Non traiter</option>
+                 <option value="livre">Livré</option>         
+              </select>
+               
+                </div>
+  
+                  <div class="form-check form-check-inline">
+                  <button class="bt" (click)="search()"><i class="fa fa-search orange_color fa-2x"></i></button>
+                  </div>
+             
+              </div>
+  
+  
+  
+  
+              <div class="table-responsive-xl">
+                <br><br><br><br><br><br><br><br>
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">COG</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">FI</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Qte</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Date liv</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Date délais </th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Priorité</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Durée</th>
+                      
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;"
+                      *ngIf="isPilote">Affectation</th>
+  
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Motif</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+  
+  
+                    <tr *ngFor="let desat of desats; let i = index">
+                      <td style="color: black;"> {{ desat.cog }} </td>
+                      <td style="color: black;"> {{ desat.fi }} </td>
+                
+                      <td style="color: black;"> {{ desat.quantite }} </td>
+                      <td style="color: black;"> {{ desat.dateLivraison | date: 'dd/MM/yyyy' }} </td>
+                      <td style="color: black;"> {{ desat.dateDeadline | date: 'dd/MM/yyyy' }} </td>
+                      <td style="color: black;"> {{ desat.priorite }} </td>
+                      <td style="color: black;"> {{ desat.duree }} </td>
+                      <td style="color: black;" *ngIf="isPilote"> {{ desat.affectation }} </td>
+  
+  
+                      <td style="color: black;"
+                        *ngIf="desat.motif !=='' && desat.motifReaffectation ==null && desat.motif !=='En attente' && desat.motif !=='nonTraite' && desat.motif !=='enCours'">
+                        {{ desat.motif }} </td>
+                      <td style="color: black;"
+                        *ngIf="desat.motif !=='' && desat.motifReaffectation !==null && desat.motif !=='En attente' && desat.motif !=='nonTraite' && desat.motif !=='enCours'">
+                        {{ desat.motifReaffectation }} </td>
+  
+                      <td style="color: black;" *ngIf="desat.motif==''"> Livré</td>
+                      <td style="color: black;" *ngIf="desat.motif =='En attente'"> En attente </td>
+                      <td style="color: black;" *ngIf="desat.motif =='nonTraite'"> Non traité </td>
+                      <td style="color: black;" *ngIf="desat.motif =='enCours'"> En cours</td>
+  
+                      <td>
+  
+                        <button class="bt"
+                          *ngIf="(isPilote || desat.affectation == cuid) && desat.motif =='En attente' && desat.motif !== 'enCours' && desat.motifReaffectation !== 'enCours'"
+                          data-toggle="modal" data-target="#modifierNropm" (click)="getDesat(desat)"><i
+                            class="fa fa-pencil-square yellow_color fa-2x"></i></button>
+                            <br>
+                        <button class="bt"
+                          *ngIf="desat.dateLivraison !== null && desat.motif !== 'enCours' && desat.motifReaffectation !== 'enCours'"
+                          data-toggle="modal" data-target="#nropmDetails" (click)="getDesat(desat)"><i
+                            class="fa fa-reorder yellow_color fa-2x"></i></button>
+                        <br><br>
+                        <button class="bty"
+                          *ngIf="desat.motifReaffectation =='nonTraite' && desat.dateLivraison !== null && desat.motif !== 'enCours' && desat.motifReaffectation !== 'enCours'">Réaffecter</button>
+                        <button class="bty"
+                          *ngIf="desat.motif =='nonTraite' && desat.dateLivraison == null && desat.motif !== 'enCours' && desat.motifReaffectation !== 'enCours'"
+                          data-toggle="modal" data-target="#TraiterNropm" (click)="getDesat(desat)">Traiter</button>
+                        <br><br>
+  
+  
+                    </tr>
+  
+                  </tbody>
+                </table>
+              </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <!-- footer -->
+      <div class="container-fluid">
+        <div class="row">
+          <div class="footer">
+            <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end dashboard inner -->
+  </div>
+  
+  
+  <div class="modal fade" id="nropmDetails">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Détails</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+          <table class="table" *ngIf="currentDesat">
+  
+            <tr>
+              <td style="font-weight: bold;color: black;">UI</td>
+              <td style="color: black;">{{ currentDesat.ui }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">COG</td>
+              <td style="color: black;">{{ currentDesat.cog }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Quantite</td>
+              <td style="color: black;">{{ currentDesat.quantite }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Date reception</td>
+              <td style="color: black;">{{ currentDesat.dateReception | date: 'dd/MM/yyyy' }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Date livraison</td>
+              <td style="color: black;">{{ currentDesat.dateLivraison | date: 'dd/MM/yyyy' }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Date réaffectation</td>
+              <td style="color: black;">{{ currentDesat.date_reafictation | date: 'dd/MM/yyyy' }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Date livraison réaffectation</td>
+              <td style="color: black;">{{ currentDesat.date_liv_reafictation | date: 'dd/MM/yyyy' }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Durée</td>
+              <td style="color: black;">{{ currentDesat.duree }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Affectation</td>
+              <td style="color: black;"> {{ currentDesat.affectation }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Commentaire</td>
+              <td style="color: black;">{{ currentDesat.commentaire }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Motif</td>
+              <td style="color: black;"
+                *ngIf="currentDesat.motif !=='' && currentDesat.motif !=='En attente' && currentDesat.motif !=='nonTraite' && currentDesat.motif !=='enCours'">
+                {{ currentDesat.motif }} </td>
+              <td style="color: black;" *ngIf="currentDesat.motif==''"> Livré</td>
+              <td style="color: black;" *ngIf="currentDesat.motif =='En attente'"> En attente </td>
+              <td style="color: black;" *ngIf="currentDesat.motif =='nonTraite'"> Non traité </td>
+              <td style="color: black;" *ngIf="currentDesat.motif =='enCours'"> En cours</td>
+  
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Type Element</td>
+              <td style="color: black;"> {{ currentDesat.type_element }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Motif réaffectation</td>
+              <td style="color: black;">{{ currentDesat. motifReaffectation }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Tarif</td>
+              <td style="color: black;">{{ currentDesat?.tarif?.codeTarif }} </td>
+            </tr>
+
+  
+  
+          </table>
+  
+  
+  
+  
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="bty" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  <div class="modal fade" id="modifierNropm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Modification</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+          <form ngNativeValidate (ngSubmit)="updateDesat()">
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>COG</label>
+                <input id="cog" type="text" class="form-control" required disabled [(ngModel)]="currentDesat.cog"
+                  name="cog">
+              </div>
+              <div class="form-group col-md-6">
+                <label>FI</label>
+                <input id="fi" type="text" class="form-control" required disabled [(ngModel)]="currentDesat.fi"
+                  name="fi">
+              </div>
+            </div>
+            <div class="form-row">
+              
+              <div class="form-group col-md-6">
+                <label>Motif</label>
+                <select (change)="onChange($event)" class="form-control" [(ngModel)]="currentDesat.motif" name="motif">
+  
+                  <option value="" selected>Livré</option>
+                  <option value="En attente">En attente</option>
+                  <option *ngFor="let motif of motifs; let i = index" value="{{motif.descriptionMotif}}">{{
+                    motif.descriptionMotif }}</option>>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Type Element</label>
+                <select class="form-control" [(ngModel)]="currentDesat.type_element" name="type_element">
+  
+  
+                  <option *ngFor="let typeElement of typesElements; let i = index" value="{{typeElement.nomType}}">{{
+                    typeElement.nomType }}</option>>
+  
+                </select>
+              </div>
+            </div>
+           
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date Livraison</label>
+                <input type="date" class="form-control" id="dateLivraison2" disabled name="dateLivraison">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Date reception</label>
+                <input id="dateReception2" type="date" class="form-control" disabled required>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Quantite</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="currentDesat.quantite"
+                  name="quantite">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Durée</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="currentDesat.duree" name="duree">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Unité D'intervention</label>
+                <select class="custom-select" [(ngModel)]="currentDesat.ui" name="uniteIntervention"
+                  required>
+  
+                  <option value="NC" selected>NC</option>
+                  <option value="AURA">AURA</option>
+                  <option value="PP">PP</option>
+                  <option value="NDF">NDF</option>
+                  <option value="UISO">UISO</option>
+  
+                </select>
+              </div>
+  
+              <div class="form-group col-md-6">
+                <label>Banettes</label>
+                <select disabled name="subject" class="custom-select" multiple>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 17</option>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 33</option>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 79/86</option>
+                  <option  *ngIf="currentDesat.ui=== 'NC'">RIP ORNE</option>
+                </select>
+              </div>
+            </div>
+        
+  
+  
+            <div class="form-row">
+              
+              
+              <div class="form-group col-md-6">
+                <label>Commentaire</label>
+                <textarea name="commentaire" id="commentaire" cols="170" rows="3" class="form-control" [(ngModel)]="currentDesat.commentaire" ></textarea>
+              </div>
+            </div>
+  
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Close</button>
+              <button class="bty" type="submit">Enregistrer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade" id="TraiterNropm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Traitement</h4>
+          <button type="button" (click)="annulerEncours()" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+  
+          <form ngNativeValidate (ngSubmit)="TraiterDesat()">
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>COG</label>
+                <input id="cog" type="text" class="form-control" required disabled [(ngModel)]="currentDesat.cog"
+                  name="cog">
+              </div>
+              <div class="form-group col-md-6">
+                <label>FI</label>
+                <input id="fi" type="text" class="form-control" required disabled [(ngModel)]="currentDesat.fi"
+                  name="fi">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              
+              <div class="form-group col-md-6">
+                <label>Type Element</label>
+                <select class="form-control" [(ngModel)]="currentDesat.type_element" name="type_element">
+  
+  
+                  <option *ngFor="let typeElement of typesElements; let i = index" value="{{typeElement.nomType}}">{{
+                    typeElement.nomType }}</option>>
+  
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Motif</label>
+                <select (change)="onChange($event)" class="form-control" [(ngModel)]="currentDesat.motif" name="motif">
+  
+                  <option value="" selected>Livré</option>
+                  <option value="En attente">En attente</option>
+                  <option *ngFor="let motif of motifs; let i = index" value="{{motif.descriptionMotif}}">{{
+                    motif.descriptionMotif }}</option>>
+                </select>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date Livraison</label>
+                <input type="date" class="form-control" id="dateLivraison1" disabled name="dateLivraison">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Date reception</label>
+                <input id="dateReception1" type="date" class="form-control" disabled required>
+              </div>
+            </div>
+  
+            
+  
+         
+  
+            <div class="form-row">
+              
+              <div class="form-group col-md-6">
+                <label>Quantite</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="currentDesat.quantite"
+                  name="quantite">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Durée</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="currentDesat.duree" name="duree">
+              </div>
+            </div>
+              <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Unité D'intervention</label>
+                <select class="custom-select" [(ngModel)]="currentDesat.ui" name="uniteIntervention"
+                  required>
+  
+                  <option value="NC" selected>NC</option>
+                  <option value="AURA">AURA</option>
+                  <option value="PP">PP</option>
+                  <option value="NDF">NDF</option>
+                  <option value="UISO">UISO</option>
+  
+                </select>
+              </div>
+  
+              <div class="form-group col-md-6">
+                <label>Banettes</label>
+                <select disabled name="subject" class="custom-select" multiple>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 17</option>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 33</option>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 79/86</option>
+                  <option  *ngIf="currentDesat.ui=== 'NC'">RIP ORNE</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-8">
+                <label>Commentaire</label>
+                <textarea name="commentaire" id="commentaire" cols="170" rows="3" class="form-control" [(ngModel)]="currentDesat.commentaire" ></textarea>
+               
+              </div>
+              
+  
+            </div>
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" (click)="annulerEncours()" class="bty" data-dismiss="modal">Close</button>
+              <button class="bty" type="submit">Enregistrer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="modal fade" id="importerHistorique">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Importer historique</h4>
+          <button type="button" (click)="annulerEncours()" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+  
+          <form ngNativeValidate (ngSubmit)="uploadHistorique()">
+  
+            <div class="custom-file">
+              <input required type="file" (change)="selectFile($event)" />
+            </div>
+          
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Close</button>
+              <button class="bty" type="submit">Importer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  <!-- Upload fichier spi -->
+  <div class="modal fade" id="importerFichierSpi">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Importer Fichier SPI</h4>
+          <button type="button" (click)="annulerEncours()" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+  
+          <form ngNativeValidate (ngSubmit)="upload()">
+  
+            <div class="custom-file">
+              <input required type="file" (change)="selectFile2($event)" />
+            </div>
+          
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Close</button>
+              <button class="bty" type="submit">Importer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,221 @@
+<div class="midde_cont">
+  <div class="container-fluid">
+    <div class="row column_title">
+      <div class="col-md-12">
+        <div class="page_title">
+          <h2>Ajout un nouveau Grafic</h2>
+        </div>
+      </div>
+    </div>
+    <!-- row -->
+    <div class="row column4 graph">
+      <!-- Gallery section -->
+      <div class="col-md-12">
+        <div class="white_shd full margin_bottom_30">
+
+          <div class="full gallery_section_inner padding_infor_info">
+
+              <form ngNativeValidate>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label>Id Grafic</label>
+                     <input class="form-control"
+                            type="number" 
+                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+                            name="idGrafic" 
+                            required 
+                            maxlength="8" 
+                            [(ngModel)]="currentGraphic.idGrafic">
+                     <div class="alert alert-danger" role="alert" *ngIf="idgrafic_err">
+                      Id Grafic should be 8 characters long
+                     </div>
+                   </div>
+ 
+                   <div class="form-group col-md-6">
+                    <label>Code IMB</label>
+                    <input class="form-control"
+                           type="text" 
+                           name="code_imb" 
+                           required  
+                           maxlength="16"   
+                           [(ngModel)]="currentGraphic.code_imb">
+                    <div class="alert-danger" *ngIf="codeIMB_err == 1">
+                      <div>Code IMB should be at least 5 characters long</div>
+                    </div>
+                    <div class="alert-danger" *ngIf="codeIMB_err == 2">
+                      <div>Code IMB should start with ' IMB/ ' </div>
+                    </div>
+                  </div>
+                </div>
+                  
+                  
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>IAR</label>
+                    <input class="form-control" 
+                           type="number" 
+                           oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+                           name="iar" 
+                           required 
+                           maxlength="10"
+                           [(ngModel)]="currentGraphic.iar">
+                    <div class="alert alert-danger" role="alert" *ngIf="iar_err == 1">
+                       IAR should be 10 characters long
+                     </div>
+                  </div>
+           
+                  <div class="form-group col-md-6">
+                    <label>Groupe d'opérateur (OI)</label>
+                       <input 
+                       class="form-control" type="text" name="groupe_operation" [(ngModel)]="currentGraphic.groupe_operation">
+                       <div class="alert alert-danger" role="alert" *ngIf="groupeOperateur_err == 1">
+                        Please Insert Groupe d'perateur
+                       </div>
+                      </div>
+                </div>
+
+                <div class="form-row">
+                    <div *ngIf="isPilote" class="form-group col-md-6">
+
+                     <label>Affectation</label>
+                         <select  name="subject" class="form-control"  [(ngModel)]="currentGraphic.affectation">
+                            <option value={{colab.cuid}} *ngFor="let colab of colabsteam; let i = index" >{{colab.cuid}} {{colab.nom}} {{colab.prenom}}</option>    
+                         </select>
+                 </div> 
+
+                 <div class="form-group col-md-6">
+                      <label >Date de traitement</label>
+                      <input *ngIf="isPilote" class="form-control" type="date" name="dateTraitement" [(ngModel)]="currentGraphic.dateTraitement">
+                      <input *ngIf="!isPilote" class="form-control" type="date" name="dateTraitement" [(ngModel)]="currentGraphic.dateTraitement" disabled="">
+                      <div class="alert alert-danger" role="alert" *ngIf="dateTraitement_err == 1">
+                        Please select a valid date
+                       </div>
+                    </div>
+                </div>
+                
+
+                <div class="form-row">
+                 <div class="form-group col-md-6">
+                    <label>Duree</label>
+                       <input 
+                       class="form-control" type="number" name="duree" [(ngModel)]="currentGraphic.duree">
+                       <div class="alert alert-danger" role="alert" *ngIf="duree_err == 1">
+                        Duree should be between 1 and 60
+                       </div>
+                      </div>
+
+                      <div class="form-group col-md-6">
+                      <label>Commentaire</label>
+                      <input class="form-control" type="text" name="commentaire" [(ngModel)]="currentGraphic.commentaire">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Type de Traitement</label>
+                         <select name="subject" class="form-control"  [(ngModel)]="currentGraphic.type_traitement">    
+                        <option value="ag">Appel sortant</option>
+                        <option value="cg">Classique Grafic</option>
+                      </select>
+                     </div>
+                     <div class="alert alert-danger" role="alert" *ngIf="type_traitement_err == 1">
+                      Please Select an option
+                     </div>
+                     <div class="form-group col-md-6">
+                        <label>Statut Grafic</label>
+                            <select name="subject" class="form-control" [(ngModel)]="currentGraphic.statut_graphic">
+                                <option value="po">Préparation de l'envoi</option>
+                               <option value="arc">Attente retour client</option>
+                               <option value="l">Libéré</option>
+                            </select>
+                        </div>
+                        <div class="alert alert-danger" role="alert" *ngIf="statut_graphic_err == 1">
+                         Please Select an option
+                        </div>
+                    </div> 
+  
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                     <label>Traitement effectué</label>
+                         <select name="subject" class="form-control"  [(ngModel)]="currentGraphic.traitement_effectue">
+                             <option value="IAPTO" *ngIf="currentGraphic.statut_graphic === 'po'">Injection avec PTO</option>
+                            <option value="ISPTO" *ngIf="currentGraphic.statut_graphic === 'po'">Injection sans PTO</option>
+                            <option value="1REPRDV" *ngIf="currentGraphic.statut_graphic === 'arc'">1er report RDV</option>
+                            <option value="2REPRDV" *ngIf="currentGraphic.statut_graphic === 'arc'">2eme report RDV</option>
+                            <option value="RELANCESMS" *ngIf="currentGraphic.statut_graphic === 'arc'">Relance SMS + Mise en attente</option>
+                            <option value="RELANCERAI" *ngIf="currentGraphic.statut_graphic === 'arc'">Relance RAI</option>
+                            <option value="ABAND" *ngIf="currentGraphic.statut_graphic === 'l'">Abandon de la commande</option>
+                         </select>
+                     </div>
+                     <div class="alert alert-danger" role="alert" *ngIf="traitement_effectue_err == 1">
+                      Please Select an option
+                     </div>
+                 </div>
+
+
+          <div class="alert alert-success d-flex align-items-center" role="alert" *ngIf="submittedok">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+            <div>
+              The acte was submited successfully
+            </div>
+          </div> 
+          <div class="alert alert-success d-flex align-items-center" role="alert" *ngIf="submittederr && !submittedok">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Error:"></svg>
+            <div>
+              An Acte with same information already exists!
+            </div>
+          </div> 
+          <br> 
+          <div style="text-align: center;" *ngIf="!submittedok">
+            <button class="btn btn--radius-2 btn--blue" style="background-color: rgb(245, 108, 17);" type="submit" (click)="savegraphic()">Submit</button>
+          </div>
+
+          <div  style="text-align: center;" *ngIf="submittedok">
+            <button class="btn btn--radius-2 btn--blue" style="background-color: rgb(245, 108, 17);" type="submit" data-bs-toggle="modal"  data-bs-target="#confirmdeletionmodal" (click)="newInsertGrafic()">New</button>
+          </div>
+          
+          
+        </form>
+        
+          <!-- Modal delation-->
+  <div class="modal fade" id="confirmdeletionmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Acte Already exists</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        
+
+          <div>
+            <img class="deletImage" src="/assets/error.png" alt="error">
+            <br>
+              Acte !
+            <br>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btnModalclose" data-bs-dismiss="modal" >OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+        
+
+  <!-- footer -->
+<div class="container-fluid">
+    <div class="row">
+    <div class="footer">
+      <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+    </div>
+    </div>
+    </div>
+    </div>
+    <!-- end dashboard inner -->
+    </div>
+
+
+<!-- end document-->

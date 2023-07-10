@@ -1,0 +1,443 @@
+
+ <div class="midde_cont">
+    <div class="container-fluid">
+      <div class="row column_title">
+        <div class="col-md-12">
+          <div class="page_title">
+            <h2>Traitement ESIMB</h2>
+          </div>
+        </div>
+      </div>
+      <!-- row -->
+      <div class="row column4 graph">
+        <!-- Gallery section -->
+        <div class="col-md-12">
+          <div class="white_shd full margin_bottom_30">
+  
+            <div class="full gallery_section_inner padding_infor_info">
+  
+              <div class="full graph_head">
+                <div class="heading1 margin_0">
+  
+                  <button class="bty" data-toggle="modal" data-target="#importerHistorique"><i
+                      class="fa fa-upload white_color fa-1x"></i> &nbsp; Importer historique</button>&nbsp;
+                </div>
+              </div>
+
+              <div class="full graph_head">
+
+    
+
+      
+              <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="searchbycodeBanbou" value="codeBanbou" checked [(ngModel)]="searchby">
+              <label class="form-check-label" for="inlineRadio1">Code Banbou</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="searchbycodeIMB" value="codeIMB" [(ngModel)]="searchby">
+                <label class="form-check-label" for="inlineRadio2">CodeIMB</label>
+              </div>
+              <div *ngIf="isPilote" class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="searchbyAffectation" value="Affectation" [(ngModel)]="searchby" >
+                  <label class="form-check-label" for="inlineRadio3">Affectation</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="searchbyMotif" value="motif" [(ngModel)]="searchby" >
+                  <label class="form-check-label" for="inlineRadio3">Motif</label>
+                  </div>
+        
+                  &nbsp; 
+                  <div class="form-check form-check-inline">
+          <input type="text" class="form-control" placeholder="Search by codeBanbou" *ngIf="searchby === 'codeBanbou'" [(ngModel)]="searchValue">
+          <input type="text" class="form-control" placeholder="Search by codeIMB" *ngIf="searchby === 'codeIMB'" [(ngModel)]="searchValue">
+          <select name="Affectation" class="custom-select" style="border: 0;" *ngIf="searchby === 'Affectation'" [(ngModel)]="searchValue">
+                <option value={{colab.cuid}} *ngFor="let colab of colabsteam; let i = index" > {{colab.cuid}} {{colab.nom}} {{colab.prenom}}</option>    
+          </select>
+
+          <select multiple name="motif" class="custom-select" style="border: 0;" *ngIf="searchby === 'motif'" [(ngModel)]="searchValue2">
+                <option value=""></option>
+                <option value="ORT" >ORT</option>
+                <option value="Historique">Historique</option>
+                <option value="Immeuble">Immeuble</option>
+                <option value="Inexistence IMB optimum">Inexistence IMB optimum</option>
+                <option value="Inexistence IMB Banbou">Inexistence IMB Banbou</option>
+                <option value="incohérence">Incohérence</option>
+                <option value="rami">Rami</option>
+                <option value="Pb inexistant GFI">Pb inexistant GFI</option>
+                <option value="Blocage Optimum">Blocage Optimum</option>
+                <option value="IMB Raccordable Optimum">IMB Raccordable  Optimum</option>
+                <option value="Clé en main Client">Clé en main Client</option>
+                <option value="PB Saturé">PB saturé</option>
+                <option value="Inexistence IMB Ipon">Inexistence IMB Ipon</option>
+                <option value="Position IMB introuvable">Position IMB introuvable</option>
+                <option value="PB inexistant Ipon">PB inexistant Ipon</option>
+                <option value="Non evolution statut IMB">Non evolution statut IMB</option>
+                <option value="En attente">En attente</option>      
+          </select>
+              
+                  </div>
+                  <div class="form-check form-check-inline">
+                      <button class="bt" (click)="search()"><i class="fa fa-search orange_color fa-2x"></i></button>
+                      </div>
+                 
+                  </div>
+
+           
+         <div class="table-responsive-xl">
+          <br><br><br><br><br><br><br><br>
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover">
+           <thead>
+            <tr>
+              <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">CodeBanbou</th>
+              <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">CodeIMB</th>
+              <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Qte</th>
+              <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Date liv</th>
+              <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Date délai
+                </th>
+              <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Priorité</th>
+              <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Durée</th>
+              <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Motif</th>
+              <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Actions</th>
+            </tr>
+          </thead>
+            <tbody>
+
+           <tr *ngFor="let esimb of esimbs; let i = index">
+              <td style="color: black;"> {{ esimb.codeBanbou }} </td>
+              <td style="color: black;"> {{ esimb.codeIMB }} </td>
+              <td style="color: black;"> {{ esimb.quantite }} </td>
+              <td style="color: black;"> {{ esimb.dateLivraison | date: 'dd/MM/yyyy' }} </td>
+              <td style="color: black;"> {{ esimb.dateDeadline | date: 'dd/MM/yyyy' }} </td>
+              <td style="color: black;"> {{ esimb.priorite }} </td>
+              <td style="color: black;"> {{ esimb.duree }} </td>
+
+              <td style="color: black;"
+              *ngIf="esimb.motif !=='' && esimb.motif !=='En attente'">
+              {{ esimb.motif }} </td>
+        
+            <td style="color: black;" *ngIf="esimb.motif==''"></td>
+            <td style="color: black;" *ngIf="esimb.motif =='En attente'"> En attente </td>
+
+            <td>
+
+              <button class="bt"
+                *ngIf="isPilote  || (esimb.affectation == cuid && esimb.motif =='En attente')"
+                data-toggle="modal" data-target="#modifierEsimb" (click)="getEsimb(esimb)"><i
+                  class="fa fa-pencil-square yellow_color fa-2x"></i></button>
+
+<br>
+              <button class="bt"
+                *ngIf="esimb.dateLivraison !== null "
+                data-toggle="modal" data-target="#esimbDetails" (click)="getEsimb(esimb)"><i
+                  class="fa fa-reorder yellow_color fa-2x"></i></button>
+              <br><br>
+              
+
+          </tr>
+        </tbody>
+      </table>
+         </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- footer -->
+<div class="container-fluid">
+    <div class="row">
+      <div class="footer">
+        <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end dashboard inner -->
+</div>
+
+
+
+<!-- Modal details-->
+<div class="modal fade" id="esimbDetails">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Détails</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+
+      <table class="table" *ngIf="currentEsimb">
+        
+          <tr>
+              <td style="font-weight: bold;color: black;">Code Banbou</td>              
+              <td style="color: black;">{{ currentEsimb.codeBanbou }}</td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Code IMB</td>              
+              <td style="color: black;">{{ currentEsimb.codeIMB }}</td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Quantité</td>              
+              <td style="color: black;">{{ currentEsimb.quantite }}</td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Date réception</td>
+              <td style="color: black;">{{ currentEsimb.dateReception | date: 'dd/MM/yyyy' }}</td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Date livraison</td>
+              <td style="color: black;">{{ currentEsimb.dateLivraison | date: 'dd/MM/yyyy' }} </td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Date vérification</td>
+              <td style="color: black;">{{ currentEsimb.dateVerification | date: 'dd/MM/yyyy' }} </td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Date vérification</td>
+              <td style="color: black;">{{ currentEsimb.dateLivraison  | date: 'dd/MM/yyyy' }} </td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Durée</td>
+              <td style="color: black;">{{ currentEsimb.duree }}</td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Affectation</td>
+              <td style="color: black;"> {{ currentEsimb.affectation }} </td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Commentaire</td>
+              <td style="color: black;">{{ currentEsimb.commentaire }} </td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Motif</td>
+              <td style="color: black;"
+              *ngIf="currentEsimb.motif !=='' && currentEsimb.motif !=='En attente'">
+              {{ currentEsimb.motif }} </td>
+              <td style="color: black;" *ngIf="currentEsimb.motif==''"></td>
+              <td style="color: black;" *ngIf="currentEsimb.motif =='En attente'"> En attente </td>
+          </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;">Type Element</td>
+              <td style="color: black;"> {{ currentEsimb.type_element }} </td>
+            </tr>
+          <tr>
+              <td style="font-weight: bold;color: black;" *ngIf="isPilote">Statut Facturation</td>
+              <td style="color: black;" *ngIf="isPilote">{{ currentEsimb.statutFacturation }}</td>
+          </tr> 
+          
+          
+      </table>
+        
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="bty" data-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal Modif -->
+<div class="modal fade" id="modifierEsimb">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Modification</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+            <form ngNativeValidate (ngSubmit)="updateEsimb()">
+
+        
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label>Code Banbou</label>
+                  <input type="text"
+                  class="form-control"
+                  id="codeBanbou"
+                  disabled
+                  required
+                  [(ngModel)]="currentEsimb.codeBanbou"
+                  name="codeBanbou">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                <label>Code IMB</label>  
+                        <input type="text"
+                        class="form-control"
+                        id="codeIMB"
+                        required
+                        disabled
+                        [(ngModel)]="currentEsimb.codeIMB"
+                        name="codeIMB">
+                      </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                <label> Date Réception </label>
+                      <input id="datereception" type="date"
+                       class="form-control" disabled required
+                            >
+                    </div>
+
+                    <div class="form-group col-md-6">
+                <label>Date verification</label>
+                  <input type="text"
+                  class="form-control"
+                  id="date_verification"
+                  required
+                  disabled
+                  name="date_verification"
+                  [value]= "now2">
+            </div>
+                </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                <label>Date livraison</label>
+                  <input type="date" class="form-control" id="dateLivraison" 
+                  disabled name="dateLivraison">
+                </div>
+
+                <div class="form-group col-md-6">
+                <label>Motif</label>
+                <select  (change)="onChange($event)" 
+                class="form-control" name="motif" id="motif" 
+               [(ngModel)]="currentEsimb.motif">
+
+               <option value=""></option>
+               <option value="En attente">En attente</option> 
+               <option *ngFor="let motif of motifs; let i = index" value="{{motif.descriptionMotif}}">{{
+                     motif.descriptionMotif }}</option>>  
+                 </select>
+                    </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Commentaire</label>
+                        <input type="te" 
+                        class="form-control"
+                        id="commentaire"
+                        required
+                        [(ngModel)]="currentEsimb.commentaire"
+                        name="commentaire">
+                </div>
+                <div class="form-group col-md-6">
+                          <label>Duree</label>       
+                                  <input type="number"
+                                  class="form-control"
+                                  id="duree"
+                                  required
+                                  [(ngModel)]="currentEsimb.duree"
+                                  name="duree">
+                </div>
+                </div>                    
+          
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label >Commentaire Technique</label>
+                      <form class="form-control" [(ngModel)]="currentEsimb.commentairetechnique">
+                          <textarea *ngIf="currentEsimb.motif === ''" disabled> </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'ORT'" disabled>Bonjour, Il s’agit d’un immeuble ORT. Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'Historique'" disabled>Bonjour, L’IMB est déjà dans un processus de déploiement, son évolution suit son cours. Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'Immeuble'" disabled>Bonjour, Il s’agit d’un immeuble dont le nombre de EL =xx. Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB optimum'" disabled>Bonjour, Après analyse de la demande, il s’est avéré que l’IMB n’existe pas sur OPTIMUM. Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB Banbou'" disabled>Bonjour, Après analyse de la demande, il s’est avéré que le code IMB est non identifié sur votre demande, merci de préciser le code IMB et son adresse pour qu'on puisse traiter votre demande. Cordialement,  </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'incohérence'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'rami'" disabled>Bonjour, Après analyse de la demande, nous avons identifié que cette adresse correspond à une construction récente. Afin d’accompagner au mieux le client pour le raccordement fibre de la maison individuelle, nous vous invitons à l’orienter vers le site https://maison-individuelle.orange.fr/accueil. Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'Pb inexistant GFI'" disabled> Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'Blocage Optimum'" disabled>Bonjour, Il s’agit d’un blocage SYNDIC/ Technique /UI (« Cause » ; Date programmée déblocage : XX/XX/XXXX. Cordialement,</textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'IMB Raccordable Optimum'" disabled>Bonjour, L’immeuble est déjà en statut Raccordable, la date de MESC ARCEP est ; XX/XX/XXXX. Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'Clé en main Client'" disabled>Bonjour, L'IMB est en cours d'évolution par le service concerné. Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'PB Saturé'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB Ipon'" disabled>Bonjour, Après analyse de la demande, il s’est avéré que l’IMB n’existe pas sur IPON. Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'Position IMB introuvable'" disabled>Bonjour, Merci de nous fournir une photo avec une croix pour indiquer l’emplacement exacte de logement, pour qu'on puisse traiter votre demande. Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'PB inexistant Ipon'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Cordialement, </textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'Non evolution statut IMB'" disabled>Bonjour, Votre demande ne concerne pas la fiche Evolution statut IMB. Cordialement,</textarea>
+                          <textarea *ngIf="currentEsimb.motif === 'En attente'" disabled> </textarea>   
+                          </form>
+                      </div>
+                      <div class="form-group col-md-6">
+                          <label>Commentaire Demandeur</label>
+                            <form  class="form-control"  [(ngModel)]="currentEsimb.commentairedemandeur">
+                                <textarea *ngIf="currentEsimb.motif === 'ORT'" disabled>Bonjour, L’immeuble est déployé par un autre opérateur. Vous pouvez inviter votre client à se rendre directement sur le site de l’opérateur concerné. Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,</textarea>
+                                <textarea *ngIf="currentEsimb.motif === 'Historique'" disabled>Bonjour, La création de l’adresse Immeuble est inférieure à 4 mois, l’évolution est en cours. IMB crée le --/--/---- Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,</textarea>      
+                                <textarea *ngIf="currentEsimb.motif === 'Immeuble'" disabled>Bonjour, La demande d’évolution de statut IMB ne concerne que les pavillons d’un ou 2 logements, nous ne pouvons pas traiter cette demande. Les demandes supérieures à 2 logements sont traitées dans un processus différent. Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,</textarea>      
+                                <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB optimum'" disabled>Bonjour, Après analyse de la demande, il s’est avéré que l’immeuble n’existe pas dans le SI. Cette demande ne concerne pas une demande d’évolution de statut IMB mais une demande d’adresse manquante.Cordialement,</textarea>      
+                                <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB Banbou'" disabled>Bonjour, Après analyse de la demande, il s’est avéré que le code IMB est non identifié sur votre demande, merci de préciser le code IMB et son adresse pour qu'on puisse traiter votre demande. Cordialement,</textarea>      
+                                <textarea *ngIf="currentEsimb.motif === 'incohérence'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,</textarea>      
+                                <textarea *ngIf="currentEsimb.motif === 'rami'" disabled>Bonjour, Après analyse de la demande, nous avons identifié que cette adresse correspond à une construction récente. Afin d’accompagner au mieux le client pour le raccordement fibre de la maison individuelle, nous vous invitons à l’orienter vers le site https://maison-individuelle.orange.fr/accueil. Cordialement, </textarea>                   
+                               <textarea *ngIf="currentEsimb.motif === 'Pb inexistant GFI'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement, </textarea>
+                               <textarea *ngIf="currentEsimb.motif === 'Blocage Optimum'" disabled>Bonjour, Un blocage « Type de blocage », « Cause » est constaté, l’IMB est bloqué jusqu’à --/--/---- Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Si blocage DivOP, cela signifie que c’est un IMB ORT, donc se référer au commentaire IMB ORT. Cordialement, </textarea>
+                               <textarea *ngIf="currentEsimb.motif === 'IMB Raccordable Optimum'" disabled>Bonjour, L’immeuble est déjà en statut Raccordable, la date de MESC ARCEP est ; XX/XX/XXXX. Cordialement, </textarea>
+                                <textarea *ngIf="currentEsimb.motif === 'Clé en main Client'" disabled>Bonjour, L’immeuble est déjà pris en charge par un partenaire et se trouve dans un processus d’évolution. Nous ne pouvons malheureusement pas prendre en charge cette demande ni communiquer sur un délai d’éligibilité. Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement, </textarea>
+                               <textarea *ngIf="currentEsimb.motif === 'PB Saturé'" disabled> Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement, </textarea>
+                               <textarea *ngIf="currentEsimb.motif === 'Inexistence IMB Ipon'" disabled> Bonjour, Après analyse de la demande, il s’est avéré que l’immeuble n’existe pas dans le SI. Cette demande ne concerne pas une demande d’évolution de statut IMB mais une demande d’adresse manquante.Cordialement, </textarea>
+                               <textarea *ngIf="currentEsimb.motif === 'Position IMB introuvable'" disabled>Bonjour, Cet IMB n’est pas correctement positionné, il est impossible d’identifier correctement l’emplacement du logement du client. Merci de vous rapprocher du client afin de refaire une demande en indiquant précisément l’emplacement de la maison. Cordialement, </textarea>
+                               <textarea *ngIf="currentEsimb.motif === 'PB inexistant Ipon'" disabled>Bonjour, Après analyse de la demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement, </textarea>
+                               <textarea *ngIf="currentEsimb.motif === 'Non evolution statut IMB'" disabled>Bonjour, Il ne s’agit pas d’une demande de l’évolution statut IMB / Hors périmètre, merci de revoir avec votre responsable. Cordialement, </textarea>
+                               <textarea *ngIf="currentEsimb.motif === 'En attente'" disabled>  </textarea>
+                               <textarea *ngIf="currentEsimb.motif === ''" disabled>  </textarea>
+                                   </form>
+                          </div>
+                </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+          <button type="button" class="bty" data-dismiss="modal">Fermer</button>
+          <button class="bty" type="submit" (click)="updateEsimb()">Enregistrer</button>
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+</div>
+</div>
+
+
+<!-- Modal import Historique-->
+
+<div class="modal fade" id="importerHistorique">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Importer historique</h4>
+          <button type="button"  class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+  
+          <form ngNativeValidate (ngSubmit)="uploadHistorique()">
+  
+            <div class="custom-file">
+              <input required type="file" (change)="selectFile($event)" />
+            </div>
+          
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Fermer</button>
+              <button class="bty" type="submit">Importer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+     
+
+<!-- End Modal delation-->
+
+      

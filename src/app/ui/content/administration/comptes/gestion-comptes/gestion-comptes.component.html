@@ -1,0 +1,138 @@
+<div class="midde_cont">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Gestion comptes</h2>
+                </div>
+            </div>
+        </div>
+        <!-- row -->
+        <div class="row column4 graph">
+            <!-- Gallery section -->
+            <div class="col-md-12">
+                <div class="white_shd full margin_bottom_30">
+
+                    <div class="full gallery_section_inner padding_infor_info">
+
+                        <div class="table-responsive-xl">
+                            
+                            <table id="example" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" 
+                                class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">
+                                            Nom</th>
+                                        <th
+                                            style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">
+                                            Prénom</th>
+                                        <th
+                                            style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">
+                                            CUID</th>
+
+                                        <th
+                                            style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">
+                                            Email
+                                        </th>
+                                        <th
+                                            style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">
+                                            Equipe
+                                        </th>
+                                        <th
+                                            style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">
+                                            Date inscription
+                                        </th>
+                                        <th
+                                            style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">
+                                            Rôles
+                                        </th>
+                                        <th
+                                            style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">
+                                            Etat
+                                        </th>
+                                        <th
+                                            style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">
+                                            Actions</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <ng-container *ngFor="let colab of colabs; let i = index">  
+
+                                    <tr *ngIf="colab.cuid !== username">
+
+                                            <td style="color: black;text-align: center;"> {{ colab.nom }} </td>
+                                            <td style="color: black;text-align: center;"> {{ colab.prenom }} </td>
+                                            <td style="color: black;text-align: center;"> {{ colab.cuid }} </td>
+
+                                            <td style="color: black;"> {{ colab.email }} </td>
+                                            <td style="color: black;"> {{ colab.equipe.nom }} </td>
+                                            <td style="color: black;text-align: center;"> {{ colab.dateInscription |
+                                                date:'dd/MM/yyyy' }} </td>
+                                            <td style="text-align: center;"><button class="bty"  data-toggle="modal"
+                                                    data-target="#afficherRoles">Rôles</button>
+                                            <td *ngIf="colab.active" style="color: green;text-align: center;">Activé
+                                            </td>
+                                            <td *ngIf="!colab.active" style="color: red;text-align: center;">Désactivé
+                                            </td>
+
+
+
+
+
+                                            <td>
+
+                                                <button style="text-align: center;" class="bt" *ngIf="colab.active"
+                                                (click)="desactiverCompte(colab)"><i
+                                                        class="fa fa-close red_color fa-2x"></i></button>
+
+                                                <button style="text-align: center;" class="bt" *ngIf="!colab.active"
+                                                (click)="activerCompte(colab)"><i
+                                                        class="fa fa-check green_color fa-2x"></i></button>
+
+                                        
+
+                                    </tr>
+                                </ng-container>  
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="footer">
+                    <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end dashboard inner -->
+</div>

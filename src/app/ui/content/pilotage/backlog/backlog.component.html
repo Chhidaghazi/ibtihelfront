@@ -1,0 +1,951 @@
+<div class="midde_cont">
+    <div class="container-fluid">
+      <div class="row column_title">
+        <div class="col-md-12">
+          <div class="page_title">
+            <h2>Backlog
+            </h2>
+          </div>
+        </div>
+      </div>
+      <!-- row -->
+      <div class="row column4 graph">
+        <!-- Gallery section -->
+        <div class="col-md-12">
+          <div class="white_shd full margin_bottom_30">
+  
+            <div class="full gallery_section_inner padding_infor_info">
+  
+  
+  
+  
+              <div class="full graph_head">
+                <div class="heading1 margin_0">
+  
+                  <form ngNativeValidate (ngSubmit)="rechercherParId()">
+  
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+  
+                        <label>Type prestation</label>
+                        <select class="form-control" [(ngModel)]="typePrestation" name="typePrestation" required>
+  <option>--choisir une activité</option>
+                          <option value="Lien NRO-PM" selected>Lien NRO-PM</option>
+                          <option value="Désaturations Coupleurs">Désaturations Coupleurs</option>
+                          <option value="Evolution statut IMB">Evolution statut IMB</option>
+                          <option value="Grafic">Grafic</option>
+                        </select>
+                      </div>
+  
+                      <div class="form-group col-md-4">
+                        <label>ID acte</label>
+                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Entrer l'ID acte"
+                          [(ngModel)]="id" name="id">
+                      </div>
+  
+                      <div class="form-group col-md-2">
+  
+                        <button class=" bt1"><i class="fa fa-search orange_color fa-2x"></i></button>
+                      </div>
+  
+                    </div>
+  
+                  </form>
+  
+                </div>
+  
+              </div>
+  
+  
+              <div class="table-responsive-xl">
+                <br><br><br><br><br><br><br><br>
+                <table id="example" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">ID Acte</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Prestation
+                      </th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Date
+                        réception</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Date délais
+                      </th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Priorité</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+  
+  
+                    <tr *ngFor="let acte of actes; let i = index">
+  
+  
+                      <td style="color: black;" *ngIf="acte.type_prestation.nomPrestation == 'Lien NRO-PM'"> {{ acte.cog
+                        }} </td>
+                      <td style="color: black;" *ngIf="acte.type_prestation.nomPrestation == 'Désaturations Coupleurs'">
+                        {{ acte.cog }} </td>
+                      <td style="color: black;" *ngIf="acte.type_prestation.nomPrestation == 'Evolution statut IMB'"> {{
+                        acte.codeBanbou }} </td>
+                      <td style="color: black;" *ngIf="acte.type_prestation.nomPrestation == 'Grafic'"> {{ acte.idGrafic
+                        }} </td>
+                      <td style="color: black;"> {{ acte.type_prestation.nomPrestation }} </td>
+                      <td style="color: black;"> {{ acte.dateReception | date: 'dd/MM/yyyy' }} </td>
+                      <td style="color: black;"> {{ acte.dateDeadline | date: 'dd/MM/yyyy' }} </td>
+                      <td style="color: black;"> {{ acte.priorite }} </td>
+  
+                      <td><button *ngIf="isPilote" class="bty" data-toggle="modal" data-target="#modifierPriorite"
+                          (click)="getActe(acte)">Modifier Pr</button>
+                        &nbsp;
+                        <button *ngIf="acte.type_prestation.nomPrestation == 'Lien NRO-PM' && acte.motif == 'nonTraite'"
+                          class="bty" data-toggle="modal" data-target="#traiterNropm"
+                          (click)="getActe2(acte)">Traiter</button>
+  
+                        <button
+                          *ngIf="acte.type_prestation.nomPrestation == 'Lien NRO-PM' && acte.motifReaffectation == 'nonTraite'"
+                          class="bty" data-toggle="modal" data-target="#reaffecterNropm"
+                          (click)="getActe2(acte)">Réaffecter</button>
+  
+                        <button *ngIf="acte.type_prestation.nomPrestation == 'Lien NRO-PM' && acte.motif == 'enAttente'"
+                          class="bt" data-toggle="modal" data-target="#modifierNropm" (click)="getActe(acte)"><i
+                            class="fa fa-pencil-square yellow_color fa-2x"></i></button>
+  
+                        <button
+                          *ngIf="acte.type_prestation.nomPrestation == 'Désaturations Coupleurs' &&  acte.motif == 'nonTraite'"
+                          class="bty" data-toggle="modal" data-target="#traiterDesat"
+                          (click)="getActe2(acte)">Traiter</button>
+  
+                        <button
+                          *ngIf="acte.type_prestation.nomPrestation == 'Désaturations Coupleurs' &&  acte.motifReaffectation == 'nonTraite' "
+                          class="bty" data-toggle="modal" data-target="#ReaffecterDesat"
+                          (click)="getActe(acte)">Réaffecter</button>
+  
+                        <button
+                          *ngIf="acte.type_prestation.nomPrestation == 'Désaturations Coupleurs' && acte.motif == 'enAttente'"
+                          class="bt" data-toggle="modal" data-target="#modifierDesat" (click)="getActe(acte)"><i
+                            class="fa fa-pencil-square yellow_color fa-2x"></i></button>
+  
+                        <button *ngIf="acte.type_prestation.nomPrestation == 'Evolution statut IMB'" class="bt"
+                          data-toggle="modal" data-target="#modifierEsimb" (click)="getActe(acte)"><i
+                            class="fa fa-pencil-square yellow_color fa-2x"></i></button>
+  
+                        <button *ngIf="acte.type_prestation.nomPrestation == 'Grafic'" class="bt" data-toggle="modal"
+                          data-target="#traiterGraphic" (click)="getActe(acte)"><i
+                            class="fa fa-pencil-square yellow_color fa-2x"></i></button>
+  
+  
+                      </td>
+  
+  
+                    </tr>
+  
+  
+                  </tbody>
+                </table>
+              </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- footer -->
+      <div class="container-fluid">
+        <div class="row">
+          <div class="footer">
+            <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end dashboard inner -->
+  </div>
+  
+  
+  
+  <div class="modal fade" id="modifierPriorite">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Modification du priorité</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+          <form ngNativeValidate (ngSubmit)="updatePriorite()">
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Priorité</label>
+                <select class="form-control" [(ngModel)]="current_object.priorite" name="priorite" required>
+  
+                  <option value="P0" selected>P0</option>
+                  <option value="P1">P1</option>
+                  <option value="P2">P2</option>
+  
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+  
+  
+              </div>
+            </div>
+  
+  
+  
+  
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Close</button>
+              <button class="bty" type="submit">Enregistrer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="modal fade" id="modifierNropm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Modification NRO-PM</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+          <form ngNativeValidate (ngSubmit)="updateNropm()">
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>ID OWF</label>
+                <input id="cog" type="text" class="form-control" min="1" required [(ngModel)]="current_nropm.cog" disabled
+                  name="cog">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Unité D'intervention</label>
+                <select class="form-select" disabled [(ngModel)]="current_nropm.uniteIntervention"
+                  name="uniteIntervention" required>
+  
+                  <option value="NC" selected>NC</option>
+                  <option value="AURA">AURA</option>
+                  <option value="PP">PP</option>
+                  <option value="NDF">NDF</option>
+                  <option value="SO">SO</option>
+                  <option value="RIP ORNE">RIP ORNE</option>
+                  <option value="SO RIP 17">SO RIP 17</option>
+                  <option value="SO RIP 33">SO RIP 33</option>
+                  <option value="SO RIP 79/86">SO RIP 79/86</option>
+  
+                </select>
+  
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Quantite</label>
+                <input type="number" class="form-control" min="1" disabled required [(ngModel)]="current_nropm.quantite"
+                  name="quantite">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Date reception</label>
+                <input id="dateReception1" type="date" class="form-control" disabled required>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date Livraison</label>
+                <input type="date" class="form-control" id="dateLivraison1" disabled name="dateLivraison">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Durée</label>
+                <input type="number" class="form-control" required [(ngModel)]="current_nropm.duree" name="duree">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Commentaire</label>
+                <input type="text" class="form-control" [(ngModel)]="current_nropm.commentaire" name="commentaire">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Motif</label>
+                <select (change)="onChange($event)" class="form-control" [(ngModel)]="current_nropm.motif" name="motif">
+  
+                  <option value="">Livré</option>
+                  <option value="enAttente" selected>En attente</option>
+                  <option *ngFor="let motif of motifsNropm; let i = index" value="{{motif.descriptionMotif}}">{{
+                    motif.descriptionMotif }}</option>
+  
+  
+                </select>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Type Element</label>
+                <select class="form-control" [(ngModel)]="current_nropm.type_element" name="type_element">
+  
+  
+                  <option *ngFor="let typeElement of typesElementsnNropm; let i = index" value="{{typeElement.nomType}}">
+                    {{
+                    typeElement.nomType }}</option>>
+  
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+              </div>
+            </div>
+  
+  
+            <div id="pms" *ngFor="let pm of current_nropm.pms">
+  
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>FI</label>
+                  <input type="text" class="form-control" disabled value="{{pm.refPm}}" name="refPm">
+                </div>
+                <div class="form-group col-md-6">
+                </div>
+              </div>
+  
+  
+  
+            </div>
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Fermer</button>
+              <button class="bty" type="submit">Enregistrer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade" id="traiterNropm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Traitement NRO-PM</h4>
+          <button type="button" (click)="annulerEncoursNropm()" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+  
+          <form ngNativeValidate (ngSubmit)="traiterNropm()">
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>ID OWF</label>
+                <input id="cog" type="text" class="form-control" required disabled [(ngModel)]="current_nropm.cog"
+                  name="cog">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Unité D'intervention</label>
+                <select class="form-control" [(ngModel)]="current_nropm.uniteIntervention" name="uniteIntervention"
+                  required>
+  
+                  <option value="NC" selected>NC</option>
+                  <option value="AURA">AURA</option>
+                  <option value="PP">PP</option>
+                  <option value="NDF">NDF</option>
+                  <option value="SO">SO</option>
+  
+                </select>
+  
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Banettes</label>
+                <select disabled name="subject" class="custom-select" multiple>
+                  <option *ngIf="current_nropm.uniteIntervention=== 'SO'">SO RIP 17</option>
+                  <option *ngIf="current_nropm.uniteIntervention=== 'SO'">SO RIP 33</option>
+                  <option *ngIf="current_nropm.uniteIntervention=== 'SO'">SO RIP 79/86</option>
+                  <option *ngIf="current_nropm.uniteIntervention=== 'NC'">RIP ORNE</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Date reception</label>
+                <input id="dateReception2" type="date" class="form-control" disabled required>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date Livraison</label>
+                <input type="date" class="form-control" id="dateLivraison2" disabled name="dateLivraison">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Durée</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="current_nropm.duree" name="duree">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Commentaire</label>
+                <input type="text" class="form-control" [(ngModel)]="current_nropm.commentaire" name="commentaire">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Motif</label>
+                <select (change)="onChange($event)" class="form-control" [(ngModel)]="current_nropm.motif" name="motif">
+  
+                  <option value="" selected>Livré</option>
+                  <option value="enAttente">En attente</option>
+                  <option *ngFor="let motif of motifsNropm; let i = index" value="{{motif.descriptionMotif}}">{{
+                    motif.descriptionMotif }}</option>>
+                </select>
+              </div>
+            </div>
+  
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Type Element</label>
+                <select class="form-control" [(ngModel)]="current_nropm.type_element" name="type_element">
+  
+  
+                  <option *ngFor="let typeElement of typesElementsnNropm; let i = index" value="{{typeElement.nomType}}">
+                    {{
+                    typeElement.nomType }}</option>>
+  
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Quantite</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="current_nropm.quantite"
+                  name="quantite">
+              </div>
+  
+            </div>
+  
+  
+  
+  
+            <div id="pms" *ngFor='let in of counter(current_nropm.quantite) ;let i = index'>
+  
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>FI</label>
+                  <input type="text" class="form-control" required [(ngModel)]="current_nropm.pms[i].refPm" name="refPm">
+                </div>
+                <div class="form-group col-md-6">
+                </div>
+              </div>
+  
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" (click)="annulerEncoursNropm()" class="bty" data-dismiss="modal">Fermer</button>
+              <button class="bty" type="submit">Enregistrer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="modal fade" id="modifierEsimb">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Modification ESIMB</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form ngNativeValidate (ngSubmit)="updateEsimb()">
+  
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Code Banbou</label>
+                <input type="text" class="form-control" id="codeBanbou" disabled required
+                  [(ngModel)]="currentEsimb.codeBanbou" name="codeBanbou">
+              </div>
+  
+              <div class="form-group col-md-6">
+                <label>Code IMB</label>
+                <input type="text" class="form-control" id="codeIMB" required disabled [(ngModel)]="currentEsimb.codeIMB"
+                  name="codeIMB">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label> Date Réception </label>
+                <input class="form-control" id="dateReception3" type="text" name="dateReception" required disabled>
+              </div>
+  
+              <div class="form-group col-md-6">
+                <label>Date verification</label>
+                <input type="text" class="form-control" id="date_verification" required disabled name="date_verification">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date livraison</label>
+                <input type="date" class="form-control" id="dateLivraison3" required disabled name="dateLivraison">
+              </div>
+  
+              <div class="form-group col-md-6">
+                <label>Motif</label>
+                <select (change)="onChange($event)" class="form-control" name="motif" id="motif"
+                  [(ngModel)]="currentEsimb.motif">
+  
+                  <option value="">Livré</option>
+                  <option value="En attente">En attente</option>
+                  <option *ngFor="let motif of motifsEsimb; let i = index" value="{{motif.descriptionMotif}}">{{
+                    motif.descriptionMotif }}</option>>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Commentaire</label>
+                <input type="te" class="form-control" id="commentaire" required [(ngModel)]="currentEsimb.commentaire"
+                  name="commentaire">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Duree</label>
+                <input type="number" class="form-control" id="duree" min="0" required [(ngModel)]="currentEsimb.duree"
+                  name="duree">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Commentaire Technique</label>
+                <select disabled name="subject" class="custom-select" [(ngModel)]="currentEsimb.commentairetechnique"
+                  multiple>
+                  <option *ngIf="currentEsimb.motif === ''" disabled> </option>
+                  <option *ngIf="currentEsimb.motif === 'ORT'" disabled>Bonjour, Il s’agit d’un immeuble ORT.
+                    Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Historique'" disabled>Bonjour, L’IMB est déjà dans un processus
+                    de déploiement, son évolution suit son cours. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Immeuble'" disabled>Bonjour, Il s’agit d’un immeuble dont le
+                    nombre de EL =xx. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Inexistence IMB optimum'" disabled>Bonjour, Après analyse de la
+                    demande, il s’est avéré que l’IMB n’existe pas sur OPTIMUM. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Inexistence IMB Banbou'" disabled>Bonjour, Après analyse de la
+                    demande, il s’est avéré que le code IMB est non identifié sur votre demande, merci de préciser le code
+                    IMB et son adresse pour qu'on puisse traiter votre demande. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'incohérence'" disabled>Bonjour, Après analyse de la demande, une
+                    saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation).
+                    Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'rami'" disabled>Bonjour, Après analyse de la demande, nous avons
+                    identifié que cette adresse correspond à une construction récente. Afin d’accompagner au mieux le
+                    client pour le raccordement fibre de la maison individuelle, nous vous invitons à l’orienter vers le
+                    site https://maison-individuelle.orange.fr/accueil. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Pb inexistant GFI'" disabled> Bonjour, Après analyse de la
+                    demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain
+                    (désaturation). Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Blocage Optimum'" disabled>Bonjour, Il s’agit d’un blocage
+                    SYNDIC/ Technique /UI (« Cause » ; Date programmée déblocage : XX/XX/XXXX. Cordialement,</option>
+                  <option *ngIf="currentEsimb.motif === 'IMB Raccordable Optimum'" disabled>Bonjour, L’immeuble est déjà
+                    en statut Raccordable, la date de MESC ARCEP est ; XX/XX/XXXX. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Clé en main Client'" disabled>Bonjour, L'IMB est en cours
+                    d'évolution par le service concerné. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'PB Saturé'" disabled>Bonjour, Après analyse de la demande, une
+                    saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation).
+                    Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Inexistence IMB Ipon'" disabled>Bonjour, Après analyse de la
+                    demande, il s’est avéré que l’IMB n’existe pas sur IPON. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Position IMB introuvable'" disabled>Bonjour, Merci de nous
+                    fournir une photo avec une croix pour indiquer l’emplacement exacte de logement, pour qu'on puisse
+                    traiter votre demande. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'PB inexistant Ipon'" disabled>Bonjour, Après analyse de la
+                    demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain
+                    (désaturation). Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Non evolution statut IMB'" disabled>Bonjour, Votre demande ne
+                    concerne pas la fiche Evolution statut IMB. Cordialement,</option>
+                  <option *ngIf="currentEsimb.motif === 'En attente'" disabled> </option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Commentaire Demandeur</label>
+                <select disabled name="subject" class="custom-select" multiple
+                  [(ngModel)]="currentEsimb.commentairedemandeur">
+                  <option *ngIf="currentEsimb.motif === 'ORT'" disabled>Bonjour, L’immeuble est déployé par un autre
+                    opérateur. Vous pouvez inviter votre client à se rendre directement sur le site de l’opérateur
+                    concerné. Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,</option>
+                  <option *ngIf="currentEsimb.motif === 'Historique'" disabled>Bonjour, La création de l’adresse Immeuble
+                    est inférieure à 4 mois, l’évolution est en cours. IMB crée le --/--/---- Si possible proposer une
+                    Prise d’Intérêt Fibre (PIF) au client. Cordialement,</option>
+                  <option *ngIf="currentEsimb.motif === 'Immeuble'" disabled>Bonjour, La demande d’évolution de statut IMB
+                    ne concerne que les pavillons d’un ou 2 logements, nous ne pouvons pas traiter cette demande. Les
+                    demandes supérieures à 2 logements sont traitées dans un processus différent. Si possible proposer une
+                    Prise d’Intérêt Fibre (PIF) au client. Cordialement,</option>
+                  <option *ngIf="currentEsimb.motif === 'Inexistence IMB optimum'" disabled>Bonjour, Après analyse de la
+                    demande, il s’est avéré que l’immeuble n’existe pas dans le SI. Cette demande ne concerne pas une
+                    demande d’évolution de statut IMB mais une demande d’adresse manquante.Cordialement,</option>
+                  <option *ngIf="currentEsimb.motif === 'Inexistence IMB Banbou'" disabled>Bonjour, Après analyse de la
+                    demande, il s’est avéré que le code IMB est non identifié sur votre demande, merci de préciser le code
+                    IMB et son adresse pour qu'on puisse traiter votre demande. Cordialement,</option>
+                  <option *ngIf="currentEsimb.motif === 'incohérence'" disabled>Bonjour, Après analyse de la demande, une
+                    saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Si
+                    possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,</option>
+                  <option *ngIf="currentEsimb.motif === 'rami'" disabled>Bonjour, Après analyse de la demande, nous avons
+                    identifié que cette adresse correspond à une construction récente. Afin d’accompagner au mieux le
+                    client pour le raccordement fibre de la maison individuelle, nous vous invitons à l’orienter vers le
+                    site https://maison-individuelle.orange.fr/accueil. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Pb inexistant GFI'" disabled>Bonjour, Après analyse de la
+                    demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain
+                    (désaturation). Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,
+                  </option>
+                  <option *ngIf="currentEsimb.motif === 'Blocage Optimum'" disabled>Bonjour, Un blocage « Type de blocage
+                    », « Cause » est constaté, l’IMB est bloqué jusqu’à --/--/---- Si possible proposer une Prise
+                    d’Intérêt Fibre (PIF) au client. Si blocage DivOP, cela signifie que c’est un IMB ORT, donc se référer
+                    au commentaire IMB ORT. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'IMB Raccordable Optimum'" disabled>Bonjour, L’immeuble est déjà
+                    en statut Raccordable, la date de MESC ARCEP est ; XX/XX/XXXX. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Clé en main Client'" disabled>Bonjour, L’immeuble est déjà pris
+                    en charge par un partenaire et se trouve dans un processus d’évolution. Nous ne pouvons
+                    malheureusement pas prendre en charge cette demande ni communiquer sur un délai d’éligibilité. Si
+                    possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'PB Saturé'" disabled> Bonjour, Après analyse de la demande, une
+                    saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain (désaturation). Si
+                    possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Inexistence IMB Ipon'" disabled> Bonjour, Après analyse de la
+                    demande, il s’est avéré que l’immeuble n’existe pas dans le SI. Cette demande ne concerne pas une
+                    demande d’évolution de statut IMB mais une demande d’adresse manquante.Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'Position IMB introuvable'" disabled>Bonjour, Cet IMB n’est pas
+                    correctement positionné, il est impossible d’identifier correctement l’emplacement du logement du
+                    client. Merci de vous rapprocher du client afin de refaire une demande en indiquant précisément
+                    l’emplacement de la maison. Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'PB inexistant Ipon'" disabled>Bonjour, Après analyse de la
+                    demande, une saturation du réseau est constatée, il est nécessaire de réaliser une étude terrain
+                    (désaturation). Si possible proposer une Prise d’Intérêt Fibre (PIF) au client. Cordialement,
+                  </option>
+                  <option *ngIf="currentEsimb.motif === 'Non evolution statut IMB'" disabled>Bonjour, Il ne s’agit pas
+                    d’une demande de l’évolution statut IMB / Hors périmètre, merci de revoir avec votre responsable.
+                    Cordialement, </option>
+                  <option *ngIf="currentEsimb.motif === 'En attente'" disabled> </option>
+                  <option *ngIf="currentEsimb.motif === ''" disabled> </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Type Element</label>
+                <select class="form-control" [(ngModel)]="currentEsimb.type_element" name="type_element">
+  
+  
+                  <option *ngFor="let typeElement of typesElementsnEsimb; let i = index" value="{{typeElement.nomType}}">
+                    {{
+                    typeElement.nomType }}</option>>
+  
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Fermer</button>
+              <button class="bty" type="submit">Enregistrer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade" id="modifierDesat">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Modification DESAT</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+          <form ngNativeValidate (ngSubmit)="updateDesat()">
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>COG</label>
+                <input id="cog" type="text" class="form-control" required disabled [(ngModel)]="currentDesat.cog"
+                  name="cog">
+              </div>
+              <div class="form-group col-md-6">
+                <label>FI</label>
+                <input id="fi" type="text" class="form-control" required disabled [(ngModel)]="currentDesat.fi"
+                  name="fi">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Unité D'intervention</label>
+                <select class="custom-select" [(ngModel)]="currentDesat.ui" name="uniteIntervention"
+                  required>
+  
+                  <option value="NC" selected>NC</option>
+                  <option value="AURA">AURA</option>
+                  <option value="PP">PP</option>
+                  <option value="NDF">NDF</option>
+                  <option value="UISO">UISO</option>
+  
+                </select>
+              </div>
+  
+              <div class="form-group col-md-6">
+                <label>Banettes</label>
+                <select disabled name="subject" class="custom-select" multiple>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 17</option>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 33</option>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 79/86</option>
+                  <option  *ngIf="currentDesat.ui=== 'NC'">RIP ORNE</option>
+                </select>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date refus</label>
+                <input id="daterefus" type="date" class="form-control" disabled required>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Date reception</label>
+                <input id="dateReception4" type="date" class="form-control" disabled required>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date Livraison</label>
+                <input type="date" class="form-control" id="dateLivraison4" disabled name="dateLivraison">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Durée</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="currentDesat.duree" name="duree">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Commentaire</label>
+                <input type="text" class="form-control" [(ngModel)]="currentDesat.commentaire" name="commentaire">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Motif</label>
+                <select (change)="onChange($event)" class="form-control" [(ngModel)]="currentDesat.motif" name="motif">
+  
+                  <option value="" selected>Livré</option>
+                  <option value="enAttente">En attente</option>
+                  <option *ngFor="let motif of motifsDesat; let i = index" value="{{motif.descriptionMotif}}">{{
+                    motif.descriptionMotif }}</option>>
+                </select>
+              </div>
+            </div>
+  
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Type Element</label>
+                <select class="form-control" disabled [(ngModel)]="currentDesat.type_element" name="type_element">
+  
+  
+                  <option *ngFor="let typeElement of typesElementsnDesat; let i = index" value="{{typeElement.nomType}}">{{
+                    typeElement.nomType }}</option>>
+  
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Quantite</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="currentDesat.quantite"
+                  name="quantite">
+              </div>
+  
+            </div>
+  
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Close</button>
+              <button class="bty" type="submit">Enregistrer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade" id="traiterDesat">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Traitement DESAT</h4>
+          <button type="button" (click)="annulerEncoursDesat()" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+  
+          <form ngNativeValidate (ngSubmit)="TraiterDesat()">
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>COG</label>
+                <input id="cog" type="text" class="form-control" required disabled [(ngModel)]="currentDesat.cog"
+                  name="cog">
+              </div>
+              <div class="form-group col-md-6">
+                <label>FI</label>
+                <input id="fi" type="text" class="form-control" required disabled [(ngModel)]="currentDesat.fi"
+                  name="fi">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Unité D'intervention</label>
+                <select class="custom-select" [(ngModel)]="currentDesat.ui" name="uniteIntervention"
+                  required>
+  
+                  <option value="NC" selected>NC</option>
+                  <option value="AURA">AURA</option>
+                  <option value="PP">PP</option>
+                  <option value="NDF">NDF</option>
+                  <option value="UISO">UISO</option>
+  
+                </select>
+              </div>
+  
+              <div class="form-group col-md-6">
+                <label>Banettes</label>
+                <select disabled name="subject" class="custom-select" multiple>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 17</option>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 33</option>
+                  <option *ngIf="currentDesat.ui=== 'UISO'">SO RIP 79/86</option>
+                  <option  *ngIf="currentDesat.ui=== 'NC'">RIP ORNE</option>
+                </select>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date refus</label>
+                <input id="daterefus" type="date" class="form-control" disabled required>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Date reception</label>
+                <input id="dateReception5" type="date" class="form-control" disabled required>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date Livraison</label>
+                <input type="date" class="form-control" id="dateLivraison5" disabled name="dateLivraison">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Durée</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="currentDesat.duree" name="duree">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Commentaire</label>
+                <input type="text" class="form-control" [(ngModel)]="currentDesat.commentaire" name="commentaire">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Motif</label>
+                <select (change)="onChange($event)" class="form-control" [(ngModel)]="currentDesat.motif" name="motif">
+  
+                  <option value="" selected>Livré</option>
+                  <option value="enAttente">En attente</option>
+                  <option *ngFor="let motif of motifsDesat; let i = index" value="{{motif.descriptionMotif}}">{{
+                    motif.descriptionMotif }}</option>>
+                </select>
+              </div>
+            </div>
+  
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Type Element</label>
+                <select class="form-control" [(ngModel)]="currentDesat.type_element" name="type_element">
+  
+  
+                  <option *ngFor="let typeElement of typesElementsnDesat; let i = index" value="{{typeElement.nomType}}">{{
+                    typeElement.nomType }}</option>>
+  
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Quantite</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="currentDesat.quantite"
+                  name="quantite">
+              </div>
+  
+            </div>
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" (click)="annulerEncoursDesat()" class="bty" data-dismiss="modal">Fermer</button>
+              <button class="bty" type="submit">Enregistrer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>

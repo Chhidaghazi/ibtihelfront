@@ -1,0 +1,78 @@
+<div class="center verticle_center">
+    <div class="login_section">
+        <div class="logo_login">
+            <div class="center">
+                <img width="210" src="assets/images/logo/logo_icon.png" alt="#" />
+            </div>
+        </div>
+        <div class="login_form">
+
+                <form ngNativeValidate (ngSubmit)="register()" >
+                  <fieldset>
+                    <div class="field">
+                        <label class="label_field">Nom</label>
+                        <input type="text" placeholder="Entrer votre nom" name="nom" [(ngModel)]="form.nom"
+                          required />
+                      </div>
+                      <div class="field">
+                        <label class="label_field">Prénom</label>
+                        <input type="text" placeholder="Entrer votre prénom" name="prenom" [(ngModel)]="form.prenom"
+                          required />
+                      </div>
+                    <div class="field">
+                      <label class="label_field">CUID</label>
+                      <input type="text" placeholder="Entrer votre CUID" name="username" [(ngModel)]="form.username"
+                        required />
+                    </div>
+                    <div class="field">
+                        <label class="label_field">Email</label>
+                        <input type="email" placeholder="Entrer votre Email" name="email" [(ngModel)]="form.email"
+                          required />
+                      </div>
+                      <div class="field">
+                        <label class="label_field">Telephone</label>
+                        <input type="number" placeholder="Entrer votre numéro de téléphone" name="telephone" [(ngModel)]="form.telephone"
+                          required />
+                      </div>
+                  
+                      <div class="field">
+                        <label class="label_field">Equipe</label>
+                        <select [(ngModel)]="form.idEquipe" name="idEquipe">
+  
+    
+                            <option *ngFor="let equipe of equipes; let i = index" value="{{equipe.idEquipe}}">{{
+                              equipe.nom }}</option>
+                          </select>
+                      </div>
+                    
+
+                    <div class="field">
+                      <label class="label_field">Mot de passe</label>
+                      <input type="password" placeholder="Entrer votre mot de passe" class="form-control" name="password"
+                        [(ngModel)]="form.password" required minlength="4" />
+                    </div>
+                    <div class="field">
+                        <label class="label_field">Mot de passe</label>
+                        <input type="password" placeholder="Confirmer votre mot de passe" class="form-control" name="password"
+                          [(ngModel)]="password2" required minlength="4" />
+                      </div>
+
+                    <div class="alert alert-danger" *ngIf="isEmailExiste">L'email existe déja!</div>
+                    <div class="alert alert-danger" *ngIf="isCuidExiste">CUID existe déja!</div>
+                    <div class="alert alert-danger" *ngIf="isMdpErr">les deux mots de passe ne correspondent pas!</div>
+
+                    
+                    
+                    <div class="field margin_0">
+                      <label class="label_field hidden">hidden label</label>
+                      <button type="submit"style="margin-left: 50px;" class="main_bt">S'inscrire'</button>
+                    </div>
+                  </fieldset>
+                </form>
+               
+
+
+
+        </div>
+    </div>
+</div>

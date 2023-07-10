@@ -1,0 +1,648 @@
+<div class="midde_cont">
+    <div class="container-fluid">
+      <div class="row column_title">
+        <div class="col-md-12">
+          <div class="page_title">
+            <h2>Traitement NRO-PM</h2>
+          </div>
+        </div>
+      </div>
+      <!-- row -->
+      <div class="row column4 graph">
+        <!-- Gallery section -->
+        <div class="col-md-12">
+          <div class="white_shd full margin_bottom_30">
+  
+            <div class="full gallery_section_inner padding_infor_info">
+  
+  
+  
+  
+              <div class="full graph_head">
+                <div class="heading1 margin_0">
+  
+                  <button class="bty" data-toggle="modal" data-target="#importerHistorique"><i
+                      class="fa fa-upload white_color fa-1x"></i> &nbsp; Importer historique</button>&nbsp;
+                  <button class="bty" data-toggle="modal" data-target="#importerFichierSpi"><i
+                      class="fa fa-upload white_color fa-1x"></i> &nbsp; Importer fichier spi</button>
+  
+  
+                </div>
+  
+              </div>
+  
+  
+  
+              
+              <div class="full graph_head">
+               
+                    
+                  <div class="form-check form-check-inline">
+                    <input  class="form-check-input" type="radio" name="searchbyUi" value="uiNropm" checked [(ngModel)]="searchby">
+                    <label class="form-check-label" for="inlineRadio1">UI</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchbyCog" value="cogNropm" checked [(ngModel)]="searchby">
+                    <label class="form-check-label" for="inlineRadio2">ID OWF</label>
+                  </div>
+                  <div *ngIf="isPilote" class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchbyAffectation" value="Affectation" [(ngModel)]="searchby" >
+                    <label class="form-check-label" for="inlineRadio3">Affectaion</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchbyMotif" value="motif" [(ngModel)]="searchby" >
+                    <label class="form-check-label" for="inlineRadio3">Motif</label>
+                  </div>
+  
+                  &nbsp; 
+                  <div class="form-check form-check-inline">
+                  <input type="text" class="form-control" placeholder="Chercher par UI" *ngIf="searchby === 'uiNropm'" [(ngModel)]="searchValue">
+                  <input type="text" class="form-control" placeholder="Chercher par ID OWF" *ngIf="searchby === 'cogNropm'" [(ngModel)]="searchValue">
+                  <select  name="Affectation" class="custom-select" *ngIf="searchby === 'Affectation'" [(ngModel)]="searchValue">
+                    <option value={{colab.cuid}} *ngFor="let colab of colabsteam; let i = index" > {{colab.cuid}} {{colab.nom}} {{colab.prenom}}</option>    
+                 </select>
+                 <select multiple name="motif" class="custom-select" *ngIf="searchby === 'motif'" [(ngModel)]="searchValue2">
+                  <option value="nonTraite">Non traité</option>  
+                  <option value="enAttente">En attente</option>  
+                  <option value="enCours">En cours</option>    
+                  <option value="PM ABANDONNE" >PM ABANDONNE</option>
+                  <option value="POSITION TECHNIQUE COMMANDEE OCCUPEE">POSITION TECHNIQUE COMMANDEE OCCUPEE</option>
+                  <option value="INTERVENTION TECHNIQUE OC PREABLE MANQUANTE">INTERVENTION TECHNIQUE OC PREABLE MANQUANTE</option>
+                  <option value="SATURATION FIBRE">SATURATION FIBRE</option>
+                  <option value="SATURATION OC AU PRDM">SATURATION OC AU PRDM</option>
+                  <option value="AUTRE MOTIF">AUTRE MOTIF</option>
+                  <option value="CABLE NON EXISTANT DANS NRO">CABLE NON EXISTANT DANS NRO</option>
+                  <option value="PT INTROUVABLE">PT INTROUVABLE</option>
+                  <option value="REPRISE FACTURABLE">REPRISE FACTURABLE</option>
+                  <option value="POSITION COMMANDE SUR LA MAUVAISE FERME">POSITION COMMANDE SUR LA MAUVAISE FERME </option>
+                 <option value="livre">Livré</option>         
+              </select>
+               
+                </div>
+  
+                  <div class="form-check form-check-inline">
+                  <button class="bt" (click)="search()"><i class="fa fa-search orange_color fa-2x"></i></button>
+                  </div>
+             
+              </div>
+  
+  
+  
+  
+              <div class="table-responsive-xl">
+                <br><br><br><br><br><br><br><br>
+                <table id="example" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">ID OWF</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">PMs</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Qte</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Date liv</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Date délais
+                      </th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Priorité</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Durée</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;"
+                        *ngIf="isPilote">Affectation</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Motif</th>
+                      <th style="font-weight: bold;background-color:#343a40;color:white;text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+  
+  
+                    <tr *ngFor="let nropm of nropms; let i = index">
+                      <td style="color: black;"> {{ nropm.cog }} </td>
+                      <td> <button class="bty" data-toggle="modal" data-target="#pmsDetails"
+                          (click)="getPms(nropm)">PMs</button></td>
+                      <td style="color: black;"> {{ nropm.quantite }} </td>
+                      <td style="color: black;"> {{ nropm.dateLivraison | date: 'dd/MM/yyyy' }} </td>
+                      <td style="color: black;"> {{ nropm.dateDeadline | date: 'dd/MM/yyyy' }} </td>
+                      <td style="color: black;"> {{ nropm.priorite }} </td>
+                      <td style="color: black;"> {{ nropm.duree }} </td>
+                      <td style="color: black;" *ngIf="isPilote"> {{ nropm.affectation }} </td>
+  
+  
+                      <td style="color: black;"
+                        *ngIf="nropm.motif !=='' && nropm.motifReaffectation ==null && nropm.motif !=='enAttente' && nropm.motif !=='nonTraite' && nropm.motif !=='enCours'">
+                        {{ nropm.motif }} </td>
+                      <td style="color: black;"
+                        *ngIf="nropm.motif !=='' && nropm.motifReaffectation !==null && nropm.motif !=='enAttente' && nropm.motif !=='nonTraite' && nropm.motif !=='enCours'">
+                        {{ nropm.motifReaffectation }} </td>
+  
+                      <td style="color: black;" *ngIf="nropm.motif==''"> Livré</td>
+                      <td style="color: black;" *ngIf="nropm.motif =='enAttente'"> En attente </td>
+                      <td style="color: black;" *ngIf="nropm.motif =='nonTraite'"> Non traité </td>
+                      <td style="color: black;" *ngIf="nropm.motif =='enCours'"> En cours</td>
+  
+                      <td>
+  
+                        <button class="bt"
+                          *ngIf="isPilote || (nropm.affectation == cuid && (nropm.motif == 'enAttente' || nropm.motifReaffectation == 'enAttente'))" 
+                          data-toggle="modal" data-target="#modifierNropm" (click)="getNropm(nropm)"><i
+                            class="fa fa-pencil-square yellow_color fa-2x"></i></button>
+                            &nbsp;
+                        <button class="bt"
+                          *ngIf="nropm.dateLivraison !== null && nropm.motif !== 'enCours' && nropm.motifReaffectation !== 'enCours'"
+                          data-toggle="modal" data-target="#nropmDetails" (click)="getNropm(nropm)"><i
+                            class="fa fa-reorder yellow_color fa-2x"></i></button>
+                        <br><br>
+                        <button class="bty"
+                          *ngIf="nropm.motifReaffectation =='nonTraite' && nropm.dateLivraison !== null && nropm.motif !== 'enCours' && nropm.motifReaffectation !== 'enCours'">Réaffecter</button>
+                        <button class="bty"
+                          *ngIf="nropm.motif =='nonTraite' && nropm.dateLivraison == null && nropm.motif !== 'enCours' && nropm.motifReaffectation !== 'enCours'"
+                          data-toggle="modal" data-target="#TraiterNropm" (click)="getNropm2(nropm)">Traiter</button>
+                        <br><br>
+  
+  
+                    </tr>
+  
+                  </tbody>
+                </table>
+              </div>
+  
+  
+  
+  
+  
+  
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- footer -->
+      <div class="container-fluid">
+        <div class="row">
+          <div class="footer">
+            <p>Copyright © 2023 Soft BTool All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end dashboard inner -->
+  </div>
+  
+  
+  <div class="modal fade" id="nropmDetails">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Détails</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+          <table class="table" *ngIf="current_nropm">
+  
+            <tr>
+              <td style="font-weight: bold;color: black;">UI</td>
+              <td style="color: black;">{{ current_nropm.uniteIntervention }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">ID OWF</td>
+              <td style="color: black;">{{ current_nropm.cog }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Quantite</td>
+              <td style="color: black;">{{ current_nropm.quantite }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Date reception</td>
+              <td style="color: black;">{{ current_nropm.dateReception | date: 'dd/MM/yyyy' }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Date livraison</td>
+              <td style="color: black;">{{ current_nropm.dateLivraison | date: 'dd/MM/yyyy' }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Date réaffectation</td>
+              <td style="color: black;">{{ current_nropm.dateReafectation | date: 'dd/MM/yyyy' }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Date livraison réaffectation</td>
+              <td style="color: black;">{{ current_nropm.dateLivraisonReaffectation | date: 'dd/MM/yyyy' }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Durée</td>
+              <td style="color: black;">{{ current_nropm.duree }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Affectation</td>
+              <td style="color: black;"> {{ current_nropm.affectation }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Commentaire</td>
+              <td style="color: black;">{{ current_nropm.commentaire }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Motif</td>
+              <td style="color: black;"
+                *ngIf="current_nropm.motif !=='' && current_nropm.motif !=='enAttente' && current_nropm.motif !=='nonTraite' && current_nropm.motif !=='enCours'">
+                {{ current_nropm.motif }} </td>
+              <td style="color: black;" *ngIf="current_nropm.motif==''"> Livré</td>
+              <td style="color: black;" *ngIf="current_nropm.motif =='enAttente'"> En attente </td>
+              <td style="color: black;" *ngIf="current_nropm.motif =='nonTraite'"> Non traité </td>
+              <td style="color: black;" *ngIf="current_nropm.motif =='enCours'"> En cours</td>
+  
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Type Element</td>
+              <td style="color: black;"> {{ current_nropm.type_element }} </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;color: black;">Motif réaffectation</td>
+              <td style="color: black;">{{ current_nropm. motifReaffectation }} </td>
+            </tr>
+  
+  
+          </table>
+  
+  
+  
+  
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="bty" data-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="modal fade" id="pmsDetails">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">PMs</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="font-weight: bold;color: black;text-align: center;">Référence Pm</th>
+                <th style="font-weight: bold;color: black;text-align: center;">ID Acte</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let pm of pms; let i = index">
+                <td style="color: black;"> {{ pm.refPm }} </td>
+                <td style="color: black;"> {{ pm.idActPm}} </td>
+              </tr>
+  
+            </tbody>
+          </table>
+  
+  
+  
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="bty" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="modal fade" id="modifierNropm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Modification</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+          <form ngNativeValidate (ngSubmit)="updateNropm()">
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>ID OWF</label>
+                <input id="cog" type="text" class="form-control" min="1" required [(ngModel)]="current_nropm.cog" disabled
+                  name="cog">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Unité D'intervention</label>
+                <select class="form-select" disabled [(ngModel)]="current_nropm.uniteIntervention"
+                  name="uniteIntervention" required>
+  
+                  <option value="NC" selected>NC</option>
+                  <option value="AURA">AURA</option>
+                  <option value="PP">PP</option>
+                  <option value="NDF">NDF</option>
+                  <option value="SO">SO</option>
+                  <option value="RIP ORNE">RIP ORNE</option>
+                  <option value="SO RIP 17">SO RIP 17</option>
+                  <option value="SO RIP 33">SO RIP 33</option>
+                  <option value="SO RIP 79/86">SO RIP 79/86</option>
+  
+                </select>
+  
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Quantite</label>
+                <input type="number" class="form-control" min="1" disabled required [(ngModel)]="current_nropm.quantite"
+                  name="quantite">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Date reception</label>
+                <input id="dateReception" type="date" class="form-control" disabled required>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date Livraison</label>
+                <input type="date" class="form-control" id="dateLivraison" disabled name="dateLivraison">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Durée</label>
+                <input type="number" class="form-control" required [(ngModel)]="current_nropm.duree" name="duree">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Commentaire</label>
+                <input type="text" class="form-control" [(ngModel)]="current_nropm.commentaire" name="commentaire">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Motif</label>
+                <select (change)="onChange($event)" class="form-control" [(ngModel)]="current_nropm.motif" name="motif">
+  
+                  <option value="" selected>Livré</option>
+                  <option value="enAttente">En attente</option>
+                  <option *ngFor="let motif of motifs; let i = index" value="{{motif.descriptionMotif}}">{{
+                    motif.descriptionMotif }}</option>
+                </select>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Type Element</label>
+                <select class="form-control" [(ngModel)]="current_nropm.type_element" name="type_element">
+  
+  
+                  <option *ngFor="let typeElement of typesElements; let i = index" value="{{typeElement.nomType}}">{{
+                    typeElement.nomType }}</option>>
+  
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+              </div>
+            </div>
+  
+  
+  
+            <div id="pms" *ngFor="let pm of current_nropm.pms">
+  
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>FI</label>
+                  <input type="text" class="form-control" disabled value="{{pm.refPm}}" name="refPm">
+                </div>
+                <div class="form-group col-md-6">
+                </div>
+              </div>
+  
+  
+  
+            </div>
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Fermer</button>
+              <button class="bty" type="submit">Enregistrer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade" id="TraiterNropm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Traitement</h4>
+          <button type="button" (click)="annulerEncours()" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+  
+          <form ngNativeValidate (ngSubmit)="updateNropm2()">
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>ID OWF</label>
+                <input id="cog" type="text" class="form-control" required disabled [(ngModel)]="current_nropm.cog"
+                  name="cog">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Unité D'intervention</label>
+                <select class="form-control" [(ngModel)]="current_nropm.uniteIntervention" name="uniteIntervention"
+                  required>
+  
+                  <option value="NC" selected>NC</option>
+                  <option value="AURA">AURA</option>
+                  <option value="PP">PP</option>
+                  <option value="NDF">NDF</option>
+                  <option value="SO">SO</option>
+  
+                </select>
+  
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Banettes</label>
+                <select disabled name="subject" class="custom-select" multiple>
+                  <option *ngIf="current_nropm.uniteIntervention=== 'SO'">SO RIP 17</option>
+                  <option *ngIf="current_nropm.uniteIntervention=== 'SO'">SO RIP 33</option>
+                  <option *ngIf="current_nropm.uniteIntervention=== 'SO'">SO RIP 79/86</option>
+                  <option *ngIf="current_nropm.uniteIntervention=== 'NC'">RIP ORNE</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Date reception</label>
+                <input id="dateReception2" type="date" class="form-control" disabled required>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Date Livraison</label>
+                <input type="date" class="form-control" id="dateLivraison2" disabled name="dateLivraison">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Durée</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="current_nropm.duree" name="duree">
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Commentaire</label>
+                <input type="text" class="form-control" [(ngModel)]="current_nropm.commentaire" name="commentaire">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Motif</label>
+                <select (change)="onChange($event)" class="form-control" [(ngModel)]="current_nropm.motif" name="motif">
+  
+                  <option value="" selected>Livré</option>
+                  <option value="enAttente">En attente</option>
+                  <option *ngFor="let motif of motifs; let i = index" value="{{motif.descriptionMotif}}">{{
+                    motif.descriptionMotif }}</option>>
+                </select>
+              </div>
+            </div>
+  
+  
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Type Element</label>
+                <select class="form-control" [(ngModel)]="current_nropm.type_element" name="type_element">
+  
+  
+                  <option *ngFor="let typeElement of typesElements; let i = index" value="{{typeElement.nomType}}">{{
+                    typeElement.nomType }}</option>>
+  
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Quantite</label>
+                <input type="number" class="form-control" min="1" required [(ngModel)]="current_nropm.quantite"
+                  name="quantite">
+              </div>
+  
+            </div>
+  
+  
+  
+  
+            <div id="pms" *ngFor='let in of counter(current_nropm.quantite) ;let i = index'>
+  
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>FI</label>
+                  <input type="text" class="form-control" required [(ngModel)]="current_nropm.pms[i].refPm" name="refPm">
+                </div>
+                <div class="form-group col-md-6">
+                </div>
+              </div>
+  
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" (click)="annulerEncours()" class="bty" data-dismiss="modal">Fermer</button>
+              <button class="bty" type="submit">Enregistrer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="modal fade" id="importerHistorique">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Importer historique</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+  
+          <form ngNativeValidate (ngSubmit)="upload()">
+  
+            <div class="custom-file">
+              <input required type="file" (change)="selectFile($event)" />
+            </div>
+          
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Fermer</button>
+              <button class="bty" type="submit">Importer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade" id="importerFichierSpi">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;color:#fd7e14;">Importer Fichier du Spie</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+  
+  
+  
+          <form ngNativeValidate (ngSubmit)="uploadSpi()">
+  
+            <div class="custom-file">
+              <input required type="file" (change)="selectFile2($event)"  />
+            </div>
+          
+  
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="bty" data-dismiss="modal">Fermer</button>
+              <button class="bty" type="submit">Importer</button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  

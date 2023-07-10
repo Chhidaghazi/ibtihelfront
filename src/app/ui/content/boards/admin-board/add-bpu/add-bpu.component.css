@@ -1,0 +1,16 @@
+.card-body{
+    margin-left: 250px;
+}
+
+.percent::after {
+    content: '%';
+  }
+  
+  .dollar::after {
+    content: '€';
+  }
+
+  .eyy{
+    margin-top: -45px;
+    margin-left: 850px;
+  }
